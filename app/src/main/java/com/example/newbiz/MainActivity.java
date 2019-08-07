@@ -9,7 +9,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Display;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -24,9 +26,11 @@ boolean doubleBackToExitPressedOnce = false;
  boolean at_home= false;
 
 
-    public static final int FRAGMENT_MESSAGE = 1;
-    public static final int FRAGMENT_SHOP= 2;
-    public static final int FRAGMENT_HOME= 3;
+    public static final int FRAGMENT_HOME= 1;
+    public static final int FRAGMENT_MYORDERS= 2;
+    public static final int FRAGMENT_SEARCH= 3;
+    public static final int FRAGMENT_MYACCOUNT=4;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,18 +48,23 @@ boolean doubleBackToExitPressedOnce = false;
            @Override
            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                switch (menuItem.getItemId()) {
-                   case R.id.shop:
-                      // Toast.makeText(getApplicationContext(), "Shop", Toast.LENGTH_SHORT).show();
-                       setFragment(FRAGMENT_SHOP);
-                       break;
                    case R.id.home:
-                       //Toast.makeText(getApplicationContext(), "Shop", Toast.LENGTH_SHORT).show();
+                      // Toast.makeText(getApplicationContext(), "Shop", Toast.LENGTH_SHORT).show();
                        setFragment(FRAGMENT_HOME);
                        break;
-
-                   case R.id.message:
+                   case R.id.myorders:
                        //Toast.makeText(getApplicationContext(), "Shop", Toast.LENGTH_SHORT).show();
-                       setFragment(FRAGMENT_MESSAGE);
+                       setFragment(FRAGMENT_MYORDERS);
+                       break;
+
+                   case R.id.search:
+                       //Toast.makeText(getApplicationContext(), "Shop", Toast.LENGTH_SHORT).show();
+                       setFragment(FRAGMENT_SEARCH);
+                       break;
+
+                   case R.id.myaccount:
+                       //Toast.makeText(getApplicationContext(), "Shop", Toast.LENGTH_SHORT).show();
+                       setFragment(FRAGMENT_MYACCOUNT);
                        break;
                }
                    return true;
@@ -73,10 +82,14 @@ boolean doubleBackToExitPressedOnce = false;
 
         switch(frag){
 
-            case FRAGMENT_MESSAGE:
-                ft.replace(R.id.main_activity_yes,new Message(),"MESSAGE_FRAGMENT"); break;
+            case FRAGMENT_HOME:
+                ft.replace(R.id.main_activity_yes,new Home(),"HOME_FRAGMENT"); break;
 
-            case FRAGMENT_SHOP:ft.replace(R.id.main_activity_yes,new Shop(),"SHOP_FRAGMENT"); break;
+            case FRAGMENT_MYORDERS:ft.replace(R.id.main_activity_yes,new MyOrders(),"MYORDERS_FRAGMENT"); break;
+
+            case FRAGMENT_SEARCH:ft.replace(R.id.main_activity_yes,new Search(),"SEARCH_FRAGMENT");break;
+
+            case  FRAGMENT_MYACCOUNT:ft.replace(R.id.main_activity_yes,new MyAccount(),"MYACCOUNT_FRAGMENT"); break;
 
             default: ft.replace(R.id.main_activity_yes,new Home(),"HOME_FRAGMENT"); break;
 
