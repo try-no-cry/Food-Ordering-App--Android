@@ -41,7 +41,10 @@ private Context context;
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(context).inflate(R.layout.single_card,null,false);
+        View view= LayoutInflater.from(context).inflate(R.layout.single_card,parent,false);
+        view.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT));
+
+
         return new ViewHolder(view);
     }
 

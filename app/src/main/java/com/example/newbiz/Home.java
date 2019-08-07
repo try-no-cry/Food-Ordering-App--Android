@@ -119,7 +119,7 @@ ArrayList<Single_Card> list=new ArrayList<>();
                 "https://cdn.pixabay.com/photo/2017/10/10/15/28/butterfly-2837589_960_720.jpg"
         };
 
-
+//
         ViewPager viewPager=view.findViewById(R.id.viewPager);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getContext(), imageUrls);
         viewPager.setAdapter(adapter);
