@@ -3,17 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#FBC02D"
     android:orientation="vertical"
     tools:context=".Home">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
+        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="#FBC02D"
             android:orientation="vertical"
             android:weightSum="1">
@@ -30,30 +33,44 @@
 
             <!--</ViewFlipper>-->
 
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/viewPager"
-                android:layout_width="match_parent"
-                android:layout_height="0sp"
-                android:layout_gravity="top"
-                android:layout_weight="0.2"
-                android:background="#FBC02D"
-                android:paddingLeft="20sp"
-                android:paddingTop="30sp"
-                android:paddingRight="20sp"
-                android:paddingBottom="30sp">
+            <!--<androidx.viewpager.widget.ViewPager-->
+                <!--android:id="@+id/viewPager"-->
+
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0sp"-->
+
+                <!--android:layout_marginTop="0dp"-->
+
+                <!--android:layout_weight="0.2"-->
+                <!--android:background="#FBC02D"-->
+                <!--android:paddingLeft="20sp"-->
+                <!--android:paddingTop="30sp"-->
+                <!--android:paddingRight="20sp"-->
+                <!--android:paddingBottom="30sp">-->
 
 
-            </androidx.viewpager.widget.ViewPager>
+            <!--</androidx.viewpager.widget.ViewPager>-->
 
 
             <!-- TODO: Update blank fragment layout -->
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/cardsList"
+                android:id="@+id/slideRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="0sp"
+                android:layout_marginBottom="20sp"
+                android:layout_weight="1"
+                android:background="#FBC02D"
+                android:scaleType="fitCenter" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/cardsList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
                 android:layout_marginBottom="60sp"
-                android:layout_weight="0.8"
+                android:layout_weight="1"
                 android:background="#fff"
                 android:nestedScrollingEnabled="true" />
 

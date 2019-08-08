@@ -1,11 +1,15 @@
 package com.example.newbiz;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,9 +22,16 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
 private  ArrayList<Single_Card> list;
 private Context context;
 
+//ItemSelected varItemClicked;
+//
+//public interface ItemSelected{
+//    void onItemClick(int index);
+//}
+
     public CardsAdapter(ArrayList<Single_Card> list, Context context) {
         this.list = list;
         this.context = context;
+//        varItemClicked=(ItemSelected)context;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -49,23 +60,48 @@ private Context context;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
-        String imageUrl=list.get(position).getImageUrl();
-        String foodName=list.get(position).getFoodName();
-        String Price=list.get(position).getFoodPrice();
-        String place=list.get(position).getAddress();
-        String anyInfo=list.get(position).getAnyOtherInfo();
+        final String imageUrl = list.get(position).getImageUrl();
+        final String foodName = list.get(position).getFoodName();
+        final String Price = list.get(position).getFoodPrice();
+        final String place = list.get(position).getAddress();
+        final String anyInfo = list.get(position).getAnyOtherInfo();
 
         //set food image by glide
         Glide.with(context).load(imageUrl).into(holder.ivFoodImage);
 
         holder.tvFoodName.setText(foodName);
-        holder.tvPrice.setText("₹"+Price);
+        holder.tvPrice.setText("₹" + Price);
         holder.tvAreaName.setText(place);
         holder.tvAnyOtherInfo.setText(anyInfo);
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Toast.makeText(context,foodName,Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(context,OrderPage.class);
+
+                Single_Card single_card=new Single_Card();
+                single_card.setImageUrl(imageUrl);
+                single_card.setFoodName(foodName);
+                single_card.setFoodPrice(Price);
+                single_card.setAddress(place);
+                single_card.setAnyOtherInfo(anyInfo);
+
+
+                Bundle bundle=new Bundle();
+                bundle.putSerializable("single_card",single_card);
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+
+
+            }
+        });
+
     }
+
 
     @Override
     public int getItemCount() {

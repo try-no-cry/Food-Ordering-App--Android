@@ -18,12 +18,18 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+//        implements Home.fromHomeFragToactivity, CardsAdapter.ItemSelected
+{
 private BottomNavigationView menu_b;
 boolean doubleBackToExitPressedOnce = false;
  boolean at_home= false;
+//ArrayList<Single_Card> cardsList=new ArrayList<>();
+//int CardClickPos;
+
 
 
     public static final int FRAGMENT_HOME= 1;
@@ -94,10 +100,10 @@ boolean doubleBackToExitPressedOnce = false;
             default: ft.replace(R.id.main_activity_yes,new Home(),"HOME_FRAGMENT"); break;
 
         }
-        ft.setCustomAnimations(android.R.animator.fade_in,android.R.animator.fade_out);
+            ft.setCustomAnimations(android.R.animator.fade_in,android.R.animator.fade_out);
 
-       // ft.addToBackStack(null);
-        ft.commit();
+           // ft.addToBackStack(null);
+            ft.commit();
 
     }
 
@@ -138,4 +144,18 @@ boolean doubleBackToExitPressedOnce = false;
 
 
     }
+
+//    @Override
+//    public void PassToAcivity(ArrayList<Single_Card> list) {
+//        cardsList=new ArrayList<>(list);
+//
+//
+//
+//    }
+//
+//    @Override
+//    public void onItemClick(int index) {
+//        Toast.makeText(this,cardsList.get(index).getFoodName(),Toast.LENGTH_SHORT).show();
+//
+//    }
 }

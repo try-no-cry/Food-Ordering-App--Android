@@ -1,6 +1,8 @@
 package com.example.newbiz;
 
-public class Single_Card {
+import java.io.Serializable;
+
+public class Single_Card implements Serializable {
 
     private  String imageUrl,foodName,foodPrice,address,anyOtherInfo;
 
