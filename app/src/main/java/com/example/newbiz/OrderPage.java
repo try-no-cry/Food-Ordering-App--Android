@@ -87,8 +87,26 @@ private Button btnCalculateTotal,btnPlaceOrder;
                 //fragment as card view with status of delivered/undelivered
                 Toast.makeText(getApplicationContext(),"Go To 'My Orders' ",Toast.LENGTH_LONG).show();
 
+                BackgroundTask backgroundTask=new BackgroundTask(OrderPage.this);
 
-                finish();
+                //trying to insert into the db
+                int foodCardID=22;
+                int userID=23;
+                String supplyAddress="chembur me kar de";
+                float totalPrice=100;
+                String status="on the way";
+
+                String sql="INSERT INTO orders(foodcard_id,users_id,quantity,supplyAddress,totalPrice,orderStatus)" +
+                        " VALUES("+foodCardID +","+
+                        userID +","+Float.parseFloat(etQuantity.getText().toString())
+                       +"," +"'"+ supplyAddress + "'"+"," +totalPrice  +","+ "'"+status+"'"+")";
+
+//                String sql="SELECT * FROM orders";
+                backgroundTask.execute(sql,"insert.php");
+
+
+
+               // finish();
 
 
             }

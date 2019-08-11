@@ -2,11 +2,13 @@ package com.example.newbiz;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Display;
@@ -21,7 +23,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements BackgroundTask.passData
 //        implements Home.fromHomeFragToactivity, CardsAdapter.ItemSelected
 {
 private BottomNavigationView menu_b;
@@ -59,8 +61,13 @@ boolean doubleBackToExitPressedOnce = false;
                        setFragment(FRAGMENT_HOME);
                        break;
                    case R.id.myorders:
+
+                       if(MyOrders.resultFromQuery!=null || MyOrders.resultFromQuery!=""){
+                           setFragment(FRAGMENT_MYORDERS);
+                       }
+
                        //Toast.makeText(getApplicationContext(), "Shop", Toast.LENGTH_SHORT).show();
-                       setFragment(FRAGMENT_MYORDERS);
+
                        break;
 
                    case R.id.search:
@@ -91,7 +98,9 @@ boolean doubleBackToExitPressedOnce = false;
             case FRAGMENT_HOME:
                 ft.replace(R.id.main_activity_yes,new Home(),"HOME_FRAGMENT"); break;
 
-            case FRAGMENT_MYORDERS:ft.replace(R.id.main_activity_yes,new MyOrders(),"MYORDERS_FRAGMENT"); break;
+            case FRAGMENT_MYORDERS:
+                //ft.replace(R.id.main_activity_yes,new MyOrders(),"MYORDERS_FRAGMENT"); break;
+                startActivity(new Intent(this,MyOrdersActivity.class)); break;
 
             case FRAGMENT_SEARCH:ft.replace(R.id.main_activity_yes,new Search(),"SEARCH_FRAGMENT");break;
 
@@ -102,7 +111,7 @@ boolean doubleBackToExitPressedOnce = false;
         }
             ft.setCustomAnimations(android.R.animator.fade_in,android.R.animator.fade_out);
 
-           // ft.addToBackStack(null);
+            ft.addToBackStack(null);
             ft.commit();
 
     }
@@ -142,6 +151,20 @@ boolean doubleBackToExitPressedOnce = false;
 
 
 
+
+    }
+//
+    @Override
+    public void passThisData(String data) {
+        Bundle bundle = new Bundle();
+        bundle.putString("data",data);
+// set Fragmentclass Arguments
+        MyOrders fragobj = new MyOrders();
+        fragobj.setArguments(bundle);
+        MyOrders.resultFromQuery=data;
+        MyOrders myOrders=new MyOrders();
+
+        myOrders.setTextView(data);
 
     }
 
