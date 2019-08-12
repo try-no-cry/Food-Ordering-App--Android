@@ -1,9 +1,12 @@
 package com.example.newbiz;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
@@ -31,22 +34,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BackgroundTask extends AsyncTask<String,Void,String> {
-
+AlertDialog.Builder builder;
+View view;
     private static final String KEY_SUCCESS ="success" ;
     private static final String KEY_DATA ="data" ;
     Context context;
     String result="  ";
-    String connstr="http://192.168.42.162/phpAndroid/";
+    String connstr="http://192.168.42.234/phpAndroid/";
+   // private SharedPreferences sp;
 
-    public BackgroundTask(Context context)  {
+    public BackgroundTask( Context context,View view)  {
         this.context=context;
-        varPass=(passData)context;
+        //varPass=(passData)context;
+       // sp = activity.getSharedPreferences("keyName", Context.MODE_PRIVATE);
+        this.view=view;
+
     }
 
-    passData varPass;
-    public interface passData{
-        void passThisData(String data);
-    }
+//    passData varPass;
+//    public interface passData{
+//        void passThisData(String data);
+//    }
     @Override
 
     protected void onPreExecute() {
@@ -56,16 +64,21 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        builder=new AlertDialog.Builder(context);
         builder.setCancelable(true);
         builder.setTitle("Response");
         builder.setMessage(result);
         builder.create();
         builder.show();
+      //  sp.edit().putString("result",result).apply();
 
-      //  varPass.passThisData(result);
+        if(view!=null)
+        ((TextView)view).setText(result);
+
+    //    varPass.passThisData(result);
        // MyOrders.resultFromQuery=result;
         //
+
 
         //Toast.makeText(context,result,Toast.LENGTH_LONG).show();
     }
@@ -116,8 +129,10 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
                 return result;
         } catch (MalformedURLException e) {
             e.printStackTrace();
+            Log.i("Message1",e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
+            Log.i("Message2",e.getMessage());
         }
 
 

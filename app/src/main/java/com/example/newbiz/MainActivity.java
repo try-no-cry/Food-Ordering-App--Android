@@ -23,12 +23,14 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements BackgroundTask.passData
+public class MainActivity extends AppCompatActivity
 //        implements Home.fromHomeFragToactivity, CardsAdapter.ItemSelected
 {
 private BottomNavigationView menu_b;
 boolean doubleBackToExitPressedOnce = false;
  boolean at_home= false;
+ private  MyOrders myOrders;
+
 //ArrayList<Single_Card> cardsList=new ArrayList<>();
 //int CardClickPos;
 
@@ -38,14 +40,25 @@ boolean doubleBackToExitPressedOnce = false;
     public static final int FRAGMENT_MYORDERS= 2;
     public static final int FRAGMENT_SEARCH= 3;
     public static final int FRAGMENT_MYACCOUNT=4;
+    private Object passtoMyOrders;
 
 
+    passtoMyOrders varToMO;
+    public interface passtoMyOrders{
+        void passIt(String s);
+    }
+
+    public void setListener(passtoMyOrders listener)
+    {
+        varToMO = listener ;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setFragment(FRAGMENT_HOME);
 
+       myOrders=new MyOrders();
 
 
 
@@ -97,22 +110,29 @@ boolean doubleBackToExitPressedOnce = false;
 
             case FRAGMENT_HOME:
                 ft.replace(R.id.main_activity_yes,new Home(),"HOME_FRAGMENT"); break;
+                //ft.add(new Home(),"HOME_FRAGMENT");break;
 
             case FRAGMENT_MYORDERS:
-                //ft.replace(R.id.main_activity_yes,new MyOrders(),"MYORDERS_FRAGMENT"); break;
-                startActivity(new Intent(this,MyOrdersActivity.class)); break;
+               ft.replace(R.id.main_activity_yes,new MyOrders(),"MYORDERS_FRAGMENT"); break;
+            //ft.add(new MyOrders(),"MYORDERS_FRAGMENT");break;
+                //startActivity(new Intent(this,MyOrdersActivity.class)); break;
 
-            case FRAGMENT_SEARCH:ft.replace(R.id.main_activity_yes,new Search(),"SEARCH_FRAGMENT");break;
+            case FRAGMENT_SEARCH:
+               ft.replace(R.id.main_activity_yes,new Search(),"SEARCH_FRAGMENT");break;
+                //ft.add(new Search(),"SEARCH_FRAGMENT");break;
 
-            case  FRAGMENT_MYACCOUNT:ft.replace(R.id.main_activity_yes,new MyAccount(),"MYACCOUNT_FRAGMENT"); break;
+            case  FRAGMENT_MYACCOUNT:
+                ft.replace(R.id.main_activity_yes,new MyAccount(),"MYACCOUNT_FRAGMENT"); break;
+               // ft.add(new MyAccount(),"MYACCOUNT_FRAGMENT");break;
 
             default: ft.replace(R.id.main_activity_yes,new Home(),"HOME_FRAGMENT"); break;
 
         }
             ft.setCustomAnimations(android.R.animator.fade_in,android.R.animator.fade_out);
 
-            ft.addToBackStack(null);
+           // ft.addToBackStack(null);
             ft.commit();
+        getSupportFragmentManager().executePendingTransactions();
 
     }
 
@@ -153,20 +173,25 @@ boolean doubleBackToExitPressedOnce = false;
 
 
     }
+////
+//    @Override
+//    public void passThisData(final String data) {
+//        Bundle bundle = new Bundle();
+//        bundle.putString("data",data);
+//// set Fragmentclass Arguments
+//        MyOrders fragobj = new MyOrders();
+//        fragobj.setArguments(bundle);
+//        MyOrders.resultFromQuery=data;
+////        setListener((MainActivity.passtoMyOrders) passtoMyOrders);
+////
+////      varToMO.passIt(data);
+//       // myOrders.setTextView(data);
 //
-    @Override
-    public void passThisData(String data) {
-        Bundle bundle = new Bundle();
-        bundle.putString("data",data);
-// set Fragmentclass Arguments
-        MyOrders fragobj = new MyOrders();
-        fragobj.setArguments(bundle);
-        MyOrders.resultFromQuery=data;
-        MyOrders myOrders=new MyOrders();
+//
+//
+//
+//    }
 
-        myOrders.setTextView(data);
-
-    }
 
 //    @Override
 //    public void PassToAcivity(ArrayList<Single_Card> list) {

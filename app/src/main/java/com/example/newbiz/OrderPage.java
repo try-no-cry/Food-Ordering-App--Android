@@ -15,6 +15,10 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class OrderPage extends AppCompatActivity {
 private TextView tvFoodBillLabel;
 private ImageView ivFoodImage;
@@ -81,13 +85,8 @@ private Button btnCalculateTotal,btnPlaceOrder;
         btnPlaceOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"Order Placed",Toast.LENGTH_SHORT).show();
-                //order will now move to my order fragment
-                //write a query to move into my orders fragments table whic will eventually come into
-                //fragment as card view with status of delivered/undelivered
-                Toast.makeText(getApplicationContext(),"Go To 'My Orders' ",Toast.LENGTH_LONG).show();
 
-                BackgroundTask backgroundTask=new BackgroundTask(OrderPage.this);
+                BackgroundTask backgroundTask=new BackgroundTask(OrderPage.this,null);
 
                 //trying to insert into the db
                 int foodCardID=22;
@@ -96,17 +95,36 @@ private Button btnCalculateTotal,btnPlaceOrder;
                 float totalPrice=100;
                 String status="on the way";
 
-                String sql="INSERT INTO orders(foodcard_id,users_id,quantity,supplyAddress,totalPrice,orderStatus)" +
+                Date c = Calendar.getInstance().getTime();
+             //   String orderTime=c.toString();
+                String[] s=c.toString().split(" ");
+                String orderTime=s[3];
+
+                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                String orderDate = df.format(c);
+
+
+
+                String sql="INSERT INTO orders(foodcard_id,users_id,quantity,supplyAddress,totalPrice," +
+                        "orderStatus,orderDate,orderTime)" +
                         " VALUES("+foodCardID +","+
                         userID +","+Float.parseFloat(etQuantity.getText().toString())
-                       +"," +"'"+ supplyAddress + "'"+"," +totalPrice  +","+ "'"+status+"'"+")";
+                       +"," +"'"+ supplyAddress + "'"+"," +totalPrice  +","+ "'"+status+"'"+
+                        "," +"'"+ orderDate + "'"+  "," +  "'"+ orderTime + "'"+
+                        ")" ;
 
 //                String sql="SELECT * FROM orders";
                 backgroundTask.execute(sql,"insert.php");
 
 
+                Toast.makeText(getApplicationContext(),"Order Placed",Toast.LENGTH_SHORT).show();
+                //order will now move to my order fragment
+                //write a query to move into my orders fragments table whic will eventually come into
+                //fragment as card view with status of delivered/undelivered
+                Toast.makeText(getApplicationContext(),"Go To 'My Orders' ",Toast.LENGTH_LONG).show();
 
-               // finish();
+
+                finish();
 
 
             }
