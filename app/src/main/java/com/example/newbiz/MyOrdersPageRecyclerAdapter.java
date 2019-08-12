@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.zip.Inflater;
 
@@ -24,7 +26,7 @@ private Context context;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView  ivFoodImage_MO;
-        TextView tvOrderName_MO,tvOrderRefNo_MO,tvOrderDate_MO;
+        TextView tvOrderName_MO,tvOrderRefNo_MO,tvOrderDate_MO,tvOrderStatus_MO;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -32,6 +34,7 @@ private Context context;
             tvOrderName_MO=itemView.findViewById(R.id.tvOrderName_MO);
             tvOrderRefNo_MO=itemView.findViewById(R.id.tvOrderRefNo_MO);
             tvOrderDate_MO=itemView.findViewById(R.id.tvOrderDate_MO);
+            tvOrderStatus_MO=itemView.findViewById(R.id.tvOrderStatus_MO);
         }
     }
 
@@ -44,7 +47,7 @@ private Context context;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyOrdersPageRecyclerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyOrdersPageRecyclerAdapter.ViewHolder h, int position) {
 
         String imageUrl=list.get(position).getImageUrl();
         String orderName=list.get(position).getFoodName();
@@ -53,6 +56,16 @@ private Context context;
         String status=list.get(position).getOrderStatus();
 
         //set all data with holder
+        Glide.with(context).load(imageUrl).into(h.ivFoodImage_MO);
+        h.tvOrderName_MO.setText(orderName);
+        h.tvOrderRefNo_MO.setText(orderRefNo);
+        h.tvOrderDate_MO.setText(orderDate);
+        h.tvOrderStatus_MO.setText(status);
+
+        //on click there will be a dialog box to show every detail of the order
+
+
+
     }
 
     @Override
