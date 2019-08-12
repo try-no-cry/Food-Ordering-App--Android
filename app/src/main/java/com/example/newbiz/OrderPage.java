@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -15,6 +18,17 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -86,7 +100,8 @@ private Button btnCalculateTotal,btnPlaceOrder;
             @Override
             public void onClick(View view) {
 
-                BackgroundTask backgroundTask=new BackgroundTask(OrderPage.this,null);
+                MyOrders myOrders=new MyOrders();
+             //  MyOrders.BackgroundTask backgroundTask= myOrders.BackgroundTask(OrderPage.this,null);
 
                 //trying to insert into the db
                 int foodCardID=22;
@@ -104,7 +119,7 @@ private Button btnCalculateTotal,btnPlaceOrder;
                 String orderDate = df.format(c);
 
 
-
+BackgroundTask backgroundTask=new BackgroundTask();
                 String sql="INSERT INTO orders(foodcard_id,users_id,quantity,supplyAddress,totalPrice," +
                         "orderStatus,orderDate,orderTime)" +
                         " VALUES("+foodCardID +","+
@@ -124,7 +139,7 @@ private Button btnCalculateTotal,btnPlaceOrder;
                 Toast.makeText(getApplicationContext(),"Go To 'My Orders' ",Toast.LENGTH_LONG).show();
 
 
-                finish();
+//                finish();
 
 
             }
@@ -132,6 +147,10 @@ private Button btnCalculateTotal,btnPlaceOrder;
 
 
 
+    }
+
+    public void finishThisAct(){
+        finish();
     }
 
 
@@ -144,5 +163,89 @@ private Button btnCalculateTotal,btnPlaceOrder;
             view = new View(activity);
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+
+
+
+
+
+
+
+    public class BackgroundTask extends AsyncTask<String,Void,String> {
+        AlertDialog.Builder builder;
+        private static final String KEY_SUCCESS ="success" ;
+        private static final String KEY_DATA ="data" ;
+        String result="  ";
+        String connstr="http://192.168.42.230/phpAndroid/";
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            //Add progress dialog to show insertion
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            finishThisAct();
+        }
+
+        @Override
+        protected String doInBackground(String... voids) {
+
+            String sql=voids[0];
+            String extension=voids[1];
+            //can be: selectOrder.php,insert.php
+
+
+            try {
+                URL url=new URL(connstr+extension);
+                HttpURLConnection http= (HttpURLConnection) url.openConnection();
+                http.setRequestMethod("POST");
+                http.setDoInput(true);
+                http.setDoOutput(true);
+
+                OutputStream ops=http.getOutputStream();
+
+                BufferedWriter writer=new BufferedWriter(new OutputStreamWriter(ops,"utf-8"));
+
+                String data=  URLEncoder.encode("sql","UTF-8")+"="+URLEncoder.encode(sql,"UTF-8");
+
+                writer.write(data);
+                writer.flush();
+                writer.close();
+                ops.close();
+
+
+                InputStream ips=http.getInputStream();
+
+                BufferedReader reader=new BufferedReader(new InputStreamReader(ips,"ISO-8859-1"));
+
+                String line="";
+
+                while((line=reader.readLine())!=null){
+
+                    result +=line;
+
+                }
+
+                reader.close();
+                ips.close();
+                http.disconnect();
+
+                return result;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                Log.i("Message1",e.getMessage());
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.i("Message2",e.getMessage());
+            }
+
+
+            return result;
+        }
     }
 }
