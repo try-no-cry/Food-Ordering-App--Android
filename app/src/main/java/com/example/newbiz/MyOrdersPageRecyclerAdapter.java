@@ -56,7 +56,8 @@ private Context context;
         String status=list.get(position).getOrderStatus();
 
         //set all data with holder
-        Glide.with(context).load(imageUrl).into(h.ivFoodImage_MO);
+//        Glide.with(context).load(imageUrl).into(h.ivFoodImage_MO);
+        h.ivFoodImage_MO.setImageResource(R.drawable.lotus); //temporary
         h.tvOrderName_MO.setText(orderName);
         h.tvOrderRefNo_MO.setText(orderRefNo);
         h.tvOrderDate_MO.setText(orderDate);

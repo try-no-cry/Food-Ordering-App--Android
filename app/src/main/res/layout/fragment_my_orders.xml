@@ -7,14 +7,14 @@
     tools:context=".MyOrders">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/tvMyOrders"
-        android:layout_width="match_parent"
-        android:layout_height="0sp"
-        android:layout_weight="1"
-        android:text="MYORDERS"
-        android:textColor="#000"
-        android:textSize="50sp" />
+    <!--<TextView-->
+        <!--android:id="@+id/tvMyOrders"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0sp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:text="MYORDERS"-->
+        <!--android:textColor="#000"-->
+        <!--android:textSize="50sp" />-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/myOrdersFragRecycler"

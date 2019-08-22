@@ -107,7 +107,8 @@ private Button btnCalculateTotal,btnPlaceOrder;
                 int foodCardID=22;
                 int userID=23;
                 String supplyAddress="chembur me kar de";
-                float totalPrice=100;
+                String foodName="FoodName";
+                float totalPrice=0;
                 String status="on the way";
 
                 Date c = Calendar.getInstance().getTime();
@@ -120,12 +121,17 @@ private Button btnCalculateTotal,btnPlaceOrder;
 
 
 BackgroundTask backgroundTask=new BackgroundTask();
-                String sql="INSERT INTO orders(foodcard_id,users_id,quantity,supplyAddress,totalPrice," +
+                String sql="INSERT INTO orders(foodcard_id,users_id,foodName,quantity,supplyAddress,totalPrice," +
                         "orderStatus,orderDate,orderTime)" +
                         " VALUES("+foodCardID +","+
-                        userID +","+Float.parseFloat(etQuantity.getText().toString())
-                       +"," +"'"+ supplyAddress + "'"+"," +totalPrice  +","+ "'"+status+"'"+
-                        "," +"'"+ orderDate + "'"+  "," +  "'"+ orderTime + "'"+
+                        userID +","+
+                        foodName
+                        +Float.parseFloat(etQuantity.getText().toString())+","
+                        +"'"+ supplyAddress + "'"+","
+                        +totalPrice  +","
+                        + "'"+status+"'"+ ","
+                        +"'"+ orderDate + "'"+ "," +
+                        "'"+ orderTime + "'"+
                         ")" ;
 
 //                String sql="SELECT * FROM orders";
@@ -177,7 +183,7 @@ BackgroundTask backgroundTask=new BackgroundTask();
         private static final String KEY_SUCCESS ="success" ;
         private static final String KEY_DATA ="data" ;
         String result="  ";
-        String connstr="http://192.168.42.230/phpAndroid/";
+        String connstr="http://"+ MyOrders.CONNECTION +"/phpAndroid/";
 
         @Override
         protected void onPreExecute() {
