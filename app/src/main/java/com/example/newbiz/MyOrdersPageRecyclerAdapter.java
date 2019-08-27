@@ -51,13 +51,14 @@ private Context context;
 
         String imageUrl=list.get(position).getImageUrl();
         String orderName=list.get(position).getFoodName();
-        String orderRefNo=list.get(position).getOrderRefNo();
+        String orderRefNo=list.get(position).getOrder_id();
         String orderDate=list.get(position).getOrderDate();
         String status=list.get(position).getOrderStatus();
 
+
         //set all data with holder
-//        Glide.with(context).load(imageUrl).into(h.ivFoodImage_MO);
-        h.ivFoodImage_MO.setImageResource(R.drawable.lotus); //temporary
+        Glide.with(context).load(imageUrl).into(h.ivFoodImage_MO);
+//        h.ivFoodImage_MO.setImageResource(R.drawable.lotus); //temporary
         h.tvOrderName_MO.setText(orderName);
         h.tvOrderRefNo_MO.setText(orderRefNo);
         h.tvOrderDate_MO.setText(orderDate);

@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,6 +41,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 
@@ -48,14 +50,15 @@ import java.util.Objects;
  */
 public class MyOrders extends Fragment  {
 
-protected static String  CONNECTION="192.168.42.23";
-private TextView tvMyOrders;
+protected static String  CONNECTION="192.168.43.77";
+//private TextView tvMyOrders;
 private  BackgroundTask backgroundTask;
 static  String resultFromQuery;
 private RecyclerView myOrdersRecycler;
 private RecyclerView.Adapter adapter;
 private RecyclerView.LayoutManager layoutManager;
 private ArrayList<MyOrders_SingleOrder> list=new ArrayList<>();
+
 //    public MyOrders() {
 //        // Required empty public constructor
 //    }
@@ -66,7 +69,7 @@ private ArrayList<MyOrders_SingleOrder> list=new ArrayList<>();
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v=inflater.inflate(R.layout.fragment_my_orders, container, false);
-        tvMyOrders=v.findViewById(R.id.tvMyOrders);
+      // tvMyOrders=v.findViewById(R.id.tvMyOrders);
         myOrdersRecycler=v.findViewById(R.id.myOrdersFragRecycler);
 
 
@@ -77,8 +80,8 @@ private ArrayList<MyOrders_SingleOrder> list=new ArrayList<>();
 
         backgroundTask=new BackgroundTask();
 
-        String sql="SELECT * FROM orders";
-        backgroundTask.execute(sql,"selectOrder.php");
+      //  String sql="SELECT * FROM orders ORDER BY id DESC";
+        backgroundTask.execute("fillMyOrders.php");
         return v;
 
     }
@@ -95,7 +98,7 @@ private ArrayList<MyOrders_SingleOrder> list=new ArrayList<>();
     @Override
     public void onResume() {
         super.onResume();
-        tvMyOrders=getView().findViewById(R.id.tvMyOrders);
+       // tvMyOrders=getView().findViewById(R.id.tvMyOrders);
 
     }
 
@@ -113,7 +116,7 @@ private ArrayList<MyOrders_SingleOrder> list=new ArrayList<>();
     @Override
     public void onPause() {
         super.onPause();
-        tvMyOrders= Objects.requireNonNull(getView()).findViewById(R.id.tvMyOrders);
+       // tvMyOrders= Objects.requireNonNull(getView()).findViewById(R.id.tvMyOrders);
     }
 
     @Override
@@ -132,14 +135,21 @@ private ArrayList<MyOrders_SingleOrder> list=new ArrayList<>();
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //w2db;`tvMyOrders=getView().findViewById(R.id.tvMyOrders);
 
     }
+
+
+
+
+
+
+
 
     public  void setRecyclerView(String data){
 
 
         MyOrders_SingleOrder order;
+        JSONArray jsonArray;
 //        RecyclerView
 
 
@@ -147,35 +157,32 @@ private ArrayList<MyOrders_SingleOrder> list=new ArrayList<>();
 
         try {
             JSONObject jsonObject=new JSONObject(data);
-            JSONArray jsonArray=jsonObject.getJSONArray("success");
+           // JSONArray jsonArray=jsonObject.getJSONArray("success");
+            String check=jsonObject.getString("success");
+            Log.d("checkRya", String.valueOf(check));
 
-            if(jsonArray.get(0).toString()=="1"){
+            if(check.equals("1")){
 
+             //JSONArray jsonArray=jsonObject.getJSONArray("data");
                 jsonArray=jsonObject.getJSONArray("data");
                 int count=0;
-                int orderId,foodcard_id,users_id;
-                Float quantity,totalPrice;
-                String supplyAddress,orderStatus,orderDate,orderTime,foodName;
+
+                String imageUrl,foodName,orderDate,orderStatus,order_id;
                 while(count<jsonArray.length()){
 
                     JSONObject JO=jsonArray.getJSONObject(count);
-                    orderId= Integer.parseInt(JO.getString("id"));
-                    foodcard_id= Integer.parseInt(JO.getString("foodcard_id"));
-                    users_id= Integer.parseInt(JO.getString("users_id"));
-                    quantity= Float.valueOf(JO.getString("quantity"));
-                    supplyAddress=JO.getString("supplyAddress");
-                    totalPrice= Float.valueOf(JO.getString("totalPrice"));
-                    orderStatus=JO.getString("orderStatus");
-                    orderDate=JO.getString("orderDate");
-                    orderTime=JO.getString("orderTime");
+                    imageUrl=JO.getString("imageUrl");
                     foodName=JO.getString("foodName");
+                    orderDate=JO.getString("orderDate");
+                    orderStatus=JO.getString("orderStatus");
+                    order_id=JO.getString("order_id");
 
                     order=new MyOrders_SingleOrder();
-                    order.setOrderRefNo(String.valueOf(orderId) + foodcard_id+users_id);
-                    order.setOrderQuantity(String.valueOf(quantity));
-                    order.setFoodPrice(String.valueOf(totalPrice));
-                    order.setOrderDate(orderDate);
+                    order.setImageUrl(imageUrl);
                     order.setFoodName(foodName);
+                    order.setOrderDate(orderDate);
+                    order.setOrder_id(order_id);
+                    order.setOrderStatus(orderStatus);
 
                     list.add(order);
                     count++;
@@ -191,14 +198,16 @@ private ArrayList<MyOrders_SingleOrder> list=new ArrayList<>();
             }
             else {
                 //show some error message for not fetching the orders
+                Toast.makeText(getContext(),"Orders could not be fetched. Please check your internet connection.",Toast.LENGTH_LONG).show();
             }
 
 
 
         } catch (JSONException e) {
             e.printStackTrace();
+            Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_LONG).show();
         }
-        tvMyOrders.setText(data);
+        //tvMyOrders.setText(data);
 
     }
 
@@ -219,13 +228,14 @@ private ArrayList<MyOrders_SingleOrder> list=new ArrayList<>();
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             setRecyclerView(result);
+
         }
 
         @Override
         protected String doInBackground(String... voids) {
 
-            String sql=voids[0];
-            String extension=voids[1];
+//            String sql=voids[0];
+            String extension=voids[0];
             //can be: selectOrder.php,insert.php
 
 
@@ -236,16 +246,16 @@ private ArrayList<MyOrders_SingleOrder> list=new ArrayList<>();
                 http.setDoInput(true);
                 http.setDoOutput(true);
 
-                OutputStream ops=http.getOutputStream();
+             //   OutputStream ops=http.getOutputStream();
 
-                BufferedWriter writer=new BufferedWriter(new OutputStreamWriter(ops,"utf-8"));
+               // BufferedWriter writer=new BufferedWriter(new OutputStreamWriter(ops,"utf-8"));
 
-                String data=  URLEncoder.encode("sql","UTF-8")+"="+URLEncoder.encode(sql,"UTF-8");
+               // String data=  URLEncoder.encode("sql","UTF-8")+"="+URLEncoder.encode(sql,"UTF-8");
 
-                writer.write(data);
-                writer.flush();
-                writer.close();
-                ops.close();
+              //  writer.write(data);
+              //  writer.flush();
+//                writer.close();
+//                ops.close();
 
 
                 InputStream ips=http.getInputStream();
@@ -277,6 +287,8 @@ private ArrayList<MyOrders_SingleOrder> list=new ArrayList<>();
             return result;
         }
     }
+
+
 
 
 }

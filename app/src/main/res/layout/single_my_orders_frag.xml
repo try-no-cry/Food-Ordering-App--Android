@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="5sp"
+    android:layout_marginRight="5sp"
+    android:layout_marginBottom="15sp"
+    android:orientation="vertical"
+    android:padding="10sp">
 
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="5sp"
-        android:background="#d1c4e9">
+        android:background="#d1c4e9"
+        android:elevation="5sp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,7 +40,11 @@
                     android:id="@+id/tvOrderName_MO"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="#840CB6"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -47,19 +56,34 @@
                         android:id="@+id/tvOrderDate_MO"
                         android:layout_width="0sp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1" />
+                        android:layout_margin="5sp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="5sp"
+                        android:textColor="#BA7BD5"
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/tvOrderRefNo_MO"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1" />
+                        android:layout_margin="5sp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="5sp"
+                        android:textColor="#BA7BD5"
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/tvOrderStatus_MO"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1" />
+                        android:layout_margin="5sp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="5sp"
+                        android:textColor="#BA7BD5"
+                        android:textSize="15sp" />
                 </LinearLayout>
 
             </LinearLayout>

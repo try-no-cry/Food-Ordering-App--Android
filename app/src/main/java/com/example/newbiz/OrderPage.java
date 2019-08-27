@@ -42,7 +42,9 @@ tvQuantityLabel,etQuantity,
 tvAddressLabel,etAddress,
 tvTaxesLabel,tvTaxes,
 tvTotalLabel,tvTotal;
+private Single_Card myFood;
 
+private float totalPrice;
 private Button btnCalculateTotal,btnPlaceOrder;
 
 
@@ -74,7 +76,7 @@ private Button btnCalculateTotal,btnPlaceOrder;
 
         Intent intent=this.getIntent();
         Bundle bundle=intent.getExtras();
-        final Single_Card myFood= (Single_Card) bundle.getSerializable("single_card");
+         myFood= (Single_Card) bundle.getSerializable("single_card");
 
         Glide.with(this).load(myFood.getImageUrl()).into(ivFoodImage);
         tvFoodName.setText(myFood.getFoodName());
@@ -86,7 +88,7 @@ private Button btnCalculateTotal,btnPlaceOrder;
         btnCalculateTotal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                float totalPrice=Float.parseFloat(myFood.getFoodPrice())*Float.parseFloat(etQuantity.getText().toString());
+                totalPrice=Float.parseFloat(myFood.getFoodPrice())*Float.parseFloat(etQuantity.getText().toString());
 //                        + Float.parseFloat(tvTaxes.getText().toString());
 //                above line should be uncommented after putting real values
                 tvTotal.setText("₹"+totalPrice);
@@ -104,12 +106,13 @@ private Button btnCalculateTotal,btnPlaceOrder;
              //  MyOrders.BackgroundTask backgroundTask= myOrders.BackgroundTask(OrderPage.this,null);
 
                 //trying to insert into the db
-                int foodCardID=22;
+                int foodCardID=1;
                 int userID=23;
-                String supplyAddress="chembur me kar de";
-                String foodName="FoodName";
-                float totalPrice=0;
-                String status="on the way";
+                String supplyAddress=myFood.getAddress();
+                String foodName=myFood.getFoodName();
+                float totalPrice=Float.parseFloat(myFood.getFoodPrice())*Float.parseFloat(etQuantity.getText().toString());
+//                        + Float.parseFloat(tvTaxes.getText().toString());
+                String status="Order Placed";
 
                 Date c = Calendar.getInstance().getTime();
              //   String orderTime=c.toString();
@@ -121,11 +124,10 @@ private Button btnCalculateTotal,btnPlaceOrder;
 
 
 BackgroundTask backgroundTask=new BackgroundTask();
-                String sql="INSERT INTO orders(foodcard_id,users_id,foodName,quantity,supplyAddress,totalPrice," +
+                String sql="INSERT INTO orders(foodcard_id,user_id,quantity,supplyAddress,totalPrice," +
                         "orderStatus,orderDate,orderTime)" +
                         " VALUES("+foodCardID +","+
-                        userID +","+
-                        foodName
+                        userID +", "
                         +Float.parseFloat(etQuantity.getText().toString())+","
                         +"'"+ supplyAddress + "'"+","
                         +totalPrice  +","
