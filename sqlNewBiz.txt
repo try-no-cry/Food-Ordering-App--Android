@@ -1,0 +1,37 @@
+CREATE TABLE foodcard(
+
+foodcard_id int(11) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+imageUrl text NOT NULL,
+foodName text  NOT null,
+foodPrice float NOT NULL,
+address text NOT NULL,
+any_other_info NOT NULL
+
+);
+
+CREATE TABLE users(
+user_id int(11) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+name varchar(256) NOT NULL,
+email varchar(256) NOT NULL UNIQAZSUE,
+pwd text NOT NULL,
+address text NOT NULL,
+phone_no varchar(256) NOT NULL
+
+
+
+);
+
+
+
+CREATE TABLE orders(
+order_id int(11) AUTO_INCREMENT PRIMARY KEY NOT NULL,
+foodcard_id int(11)   REFERENCES foodcard(foodcard_id) ,
+user_id int(11) NOT NULL,
+quantity float NOT NULL,
+supplyAddress text NOT NULL,
+totalPrice float NOT NULL,
+status text NOT NULL,
+orderDate text NOT NULL,
+orderTime text NOT NULL
+
+);
