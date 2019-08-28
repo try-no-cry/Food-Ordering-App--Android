@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Search">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <SearchView
+        android:id="@+id/simpleSearchView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:iconifiedByDefault="false"
+        android:queryHint="Search Here">
+
+    </SearchView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/tv"
-        android:text="SEARCH"
-        android:textSize="50sp"
-        android:textColor="#000"/>
-</FrameLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp" /><!-- set query string of an search view -->
+</LinearLayout>
