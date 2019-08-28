@@ -2,7 +2,8 @@
 //CAN BE Used for inseert,update,delete
 include('dbConn.php');
 
-$result = array();
+// $result = array();
+  
 $resArray = array();
 $response = array();
 
