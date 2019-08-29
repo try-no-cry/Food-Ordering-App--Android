@@ -159,7 +159,7 @@ private ArrayList<MyOrders_SingleOrder> list=new ArrayList<>();
             JSONObject jsonObject=new JSONObject(data);
            // JSONArray jsonArray=jsonObject.getJSONArray("success");
             String check=jsonObject.getString("success");
-            Log.d("checkRya", String.valueOf(check));
+            Log.d("checkCondition", String.valueOf(check));
 
             if(check.equals("1")){
 
