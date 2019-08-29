@@ -60,9 +60,10 @@ CREATE TABLE food(
 
 CREATE TABLE relFoodStore(
 
-    rel_id int(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+   
     food_id int(11) REFERENCES foods(food_id),
-    store_id int(11) REFERENCES stores(store_id)
+    store_id int(11) REFERENCES stores(store_id),	
+    PRIMARY KEY (food_id,store_id)
 
 );
 
