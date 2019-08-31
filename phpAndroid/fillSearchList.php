@@ -26,7 +26,7 @@ $sql=" SELECT F.imageUrl ,S.location,S.contact,F.name AS foodName,S.name AS shop
 
                //add any other search property for added columns
            
-                  ;  
+                  
 
 
 if($stmt=$conn->prepare($sql)){
