@@ -50,7 +50,7 @@ import java.util.Objects;
  */
 public class MyOrders extends Fragment  {
 
-protected static String  CONNECTION="192.168.43.77";
+protected static String  CONNECTION="https://tonsorial-gear.000webhostapp.com/";
 //private TextView tvMyOrders;
 private  BackgroundTask backgroundTask;
 static  String resultFromQuery;
@@ -205,7 +205,7 @@ private ArrayList<MyOrders_SingleOrder> list=new ArrayList<>();
 
         } catch (JSONException e) {
             e.printStackTrace();
-            Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(),"Couldn't connect. Try Again",Toast.LENGTH_LONG).show();
         }
         //tvMyOrders.setText(data);
 
@@ -217,7 +217,7 @@ private ArrayList<MyOrders_SingleOrder> list=new ArrayList<>();
         private static final String KEY_SUCCESS ="success" ;
         private static final String KEY_DATA ="data" ;
         String result="  ";
-        String connstr="http://"+ CONNECTION +"/phpAndroid/";
+        String connstr= CONNECTION ;
 
         @Override
         protected void onPreExecute() {

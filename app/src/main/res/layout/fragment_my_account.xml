@@ -1,17 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MyAccount">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/tv"
-        android:text="MYACCOUNT"
-        android:textSize="50sp"
-        android:textColor="#000"/>
 
-</FrameLayout>
+    <fragment
+        android:id="@+id/fragLogin"
+        android:name="com.example.newbiz.Login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="MYACCOUNT"
+        android:textColor="#000"
+        android:textSize="50sp" />
+
+</LinearLayout>

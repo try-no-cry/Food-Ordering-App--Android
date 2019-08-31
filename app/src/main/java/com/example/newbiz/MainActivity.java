@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Display;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.Toast;
@@ -206,4 +207,27 @@ boolean doubleBackToExitPressedOnce = false;
 //        Toast.makeText(this,cardsList.get(index).getFoodName(),Toast.LENGTH_SHORT).show();
 //
 //    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_top_bar,menu);
+
+        //if login show and hide some feature
+
+
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.login: startActivity(new Intent(this,LoginActivity.class)); break;
+            case R.id.logout: Toast.makeText(this,"Logout click kiya bhai",Toast.LENGTH_SHORT).show(); break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

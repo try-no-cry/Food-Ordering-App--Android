@@ -2,11 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/orderMainPage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/orderMainPage"
     android:layout_margin="5sp"
 
+    android:background="#FCFCE1"
     android:fadeScrollbars="true"
     android:isScrollContainer="true"
     android:orientation="vertical"
@@ -33,7 +34,9 @@
                 android:text="Bill"
                 android:textColor="#680606"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:fontFamily="@font/amarante" />
+
 
             <ImageView
                 android:id="@+id/ivFoodImage"
@@ -41,6 +44,8 @@
                 android:layout_height="155dp"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/sunset" />
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -65,7 +70,8 @@
                         android:text="Food"
                         android:textColor="#000"
                         android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:fontFamily="@font/cagliostro" />
 
                     <TextView
                         android:id="@+id/tvFoodName"
@@ -93,12 +99,13 @@
                         android:layout_marginTop="10sp"
                         android:layout_marginRight="10sp"
                         android:layout_marginBottom="10sp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:padding="5sp"
                         android:text="Price Per Kg."
                         android:textColor="#000"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:fontFamily="@font/cagliostro" />
 
                     <TextView
                         android:id="@+id/tvStdPrice"
@@ -108,7 +115,6 @@
                         android:layout_marginRight="10sp"
                         android:layout_marginBottom="10sp"
                         android:layout_weight="2"
-                        android:gravity="center"
                         android:padding="5sp"
                         android:text=""
                         android:textColor="#000"
@@ -128,12 +134,13 @@
                         android:layout_marginTop="10sp"
                         android:layout_marginRight="10sp"
                         android:layout_marginBottom="10sp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:padding="5sp"
                         android:text="Quantity(kg)"
                         android:textColor="#000"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        app:fontFamily="@font/cagliostro" />
 
                     <EditText
                         android:id="@+id/etQuantity"
@@ -168,7 +175,8 @@
                         android:text="Address"
                         android:textColor="#000"
                         android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:fontFamily="@font/cagliostro" />
 
                     <EditText
                         android:id="@+id/etAddress"
@@ -204,7 +212,8 @@
                         android:text="Taxes"
                         android:textColor="#000"
                         android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:fontFamily="@font/cagliostro" />
 
                     <TextView
                         android:id="@+id/tvTaxes"
@@ -252,7 +261,8 @@
                         android:text="Total"
                         android:textColor="#000"
                         android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:fontFamily="@font/carter_one" />
 
                     <TextView
                         android:id="@+id/tvTotal"
