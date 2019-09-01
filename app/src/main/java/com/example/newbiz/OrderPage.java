@@ -47,14 +47,14 @@ private Single_Card myFood;
 private float totalPrice;
 private Button btnCalculateTotal,btnPlaceOrder;
 
-
+SessionManager manager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_page);
 
       hideKeyboard(this);
-
+      manager=new SessionManager(OrderPage.this);
 
         tvFoodBillLabel=findViewById(R.id.tvFoodBillLabel);
         ivFoodImage=findViewById(R.id.ivFoodImage);
@@ -74,6 +74,13 @@ private Button btnCalculateTotal,btnPlaceOrder;
         btnPlaceOrder=findViewById(R.id.btnPlaceOrder);
 
 
+        if(manager.getKeyAddress()!=null){
+            etAddress.setText(manager.getKeyAddress());
+        }
+        else{
+            etAddress.setText("");
+
+        }
         Intent intent=this.getIntent();
         Bundle bundle=intent.getExtras();
          myFood= (Single_Card) bundle.getSerializable("single_card");

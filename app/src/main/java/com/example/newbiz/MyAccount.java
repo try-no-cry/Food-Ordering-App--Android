@@ -16,7 +16,6 @@ import android.view.ViewGroup;
  */
 public class MyAccount extends Fragment {
 
-private  Fragment fragLogin;
     public MyAccount() {
         // Required empty public constructor
     }
@@ -27,7 +26,7 @@ private  Fragment fragLogin;
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v=inflater.inflate(R.layout.fragment_my_account, container, false);
-        fragLogin=getChildFragmentManager().findFragmentById(R.id.fragLogin);
+
 
     return v;
     }

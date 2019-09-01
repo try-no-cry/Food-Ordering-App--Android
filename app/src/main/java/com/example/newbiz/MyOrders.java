@@ -51,7 +51,7 @@ import java.util.Objects;
 public class MyOrders extends Fragment  {
 
 //protected static String  CONNECTION="https://tonsorial-gear.000webhostapp.com/";
-protected static String  CONNECTION="http://192.168.43.77/";
+protected static String  CONNECTION="http://192.168.43.77";
 //private TextView tvMyOrders;
 private  BackgroundTask backgroundTask;
 static  String resultFromQuery;
@@ -218,7 +218,7 @@ private ArrayList<MyOrders_SingleOrder> list=new ArrayList<>();
         private static final String KEY_SUCCESS ="success" ;
         private static final String KEY_DATA ="data" ;
         String result="  ";
-        String connstr= CONNECTION ;
+        String connstr= CONNECTION +"/phpAndroid/";
 
         @Override
         protected void onPreExecute() {

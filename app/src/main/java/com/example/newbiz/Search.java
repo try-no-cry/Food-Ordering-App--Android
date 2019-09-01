@@ -167,7 +167,7 @@ private ArrayList<singleSearchInfo> list=new ArrayList<>();  //initialized to pr
         private static final String KEY_SUCCESS ="success" ;
         private static final String KEY_DATA ="data" ;
         String result="  ";
-        String connstr="http://"+ MyOrders.CONNECTION +"/phpAndroid/";
+        String connstr= MyOrders.CONNECTION +"/phpAndroid/";
 
         @Override
         protected void onPreExecute() {

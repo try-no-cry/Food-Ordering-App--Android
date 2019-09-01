@@ -69,15 +69,17 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String email=etUName.getText().toString().trim();
                 String pwd=etPwd.getText().toString().trim();
-
+                String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
                 if(email.isEmpty() || pwd.isEmpty()){
 //                    Toast.makeText(LoginActivity.this,"Please fill the details.",Toast.LENGTH_SHORT).show();
                     Snackbar.make(view,"Please fill the details.",Snackbar.LENGTH_SHORT).show();
                 }
 
                 else{
-                    if(false){
+                    if(!email.matches(emailPattern)){
                             //email syntax verify
+                        Snackbar.make(view,"Invalid Email-ID.",Snackbar.LENGTH_LONG).show();
+
                     }
                     else{
                         ///fire the query to check correctness
@@ -96,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
         private static final String KEY_SUCCESS ="success" ;
         private static final String KEY_DATA ="data" ;
         String result="  ";
-        String connstr= MyOrders.CONNECTION +"phpAndroid/";
+        String connstr= MyOrders.CONNECTION +"/phpAndroid/";
 
         @Override
         protected void onPreExecute() {
@@ -199,15 +201,19 @@ public class LoginActivity extends AppCompatActivity {
                 String address=JO.getString("address");
                 String contact=JO.getString("contact");
 
-                SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
-                editor.putBoolean("loggedIn", true);  //vvi variable
-                editor.putString("name", name);
-                editor.putString("email", email);
-                editor.putString("address", address);
-                editor.putString("contact", contact);
-                editor.putString("pwd", pwd);
 
-                editor.apply();
+                SessionManager manager=new SessionManager(getApplicationContext());
+                manager.createLoginSession(name,email,address,contact,pwd);
+                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+//                SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+//                editor.putBoolean("loggedIn", true);  //vvi variable
+//                editor.putString("name", name);
+//                editor.putString("email", email);
+//                editor.putString("address", address);
+//                editor.putString("contact", contact);
+//                editor.putString("pwd", pwd);
+//
+//                editor.apply();
 
 
                 startActivity(new Intent(getApplicationContext(),MainActivity.class));

@@ -16,6 +16,7 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -25,47 +26,28 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity
-//        implements Home.fromHomeFragToactivity, CardsAdapter.ItemSelected
-{
+public class MainActivity extends AppCompatActivity{
 
 
 private BottomNavigationView menu_b;
 boolean doubleBackToExitPressedOnce = false;
- boolean at_home= false;
- private  MyOrders myOrders;
+boolean at_home= false;
+private  MyOrders myOrders;
+public static final int FRAGMENT_HOME= 1;
+public static final int FRAGMENT_MYORDERS= 2;
+public static final int FRAGMENT_SEARCH= 3;
+public static final int FRAGMENT_MYACCOUNT=4;
+SessionManager manager;
+    private MenuItem loginMenu,logoutMenu;
 
-//ArrayList<Single_Card> cardsList=new ArrayList<>();
-//int CardClickPos;
 
-
-
-    public static final int FRAGMENT_HOME= 1;
-    public static final int FRAGMENT_MYORDERS= 2;
-    public static final int FRAGMENT_SEARCH= 3;
-    public static final int FRAGMENT_MYACCOUNT=4;
-    private Object passtoMyOrders;
-    SharedPreferences sharedpreferences;
-
-    passtoMyOrders varToMO;
-    public interface passtoMyOrders{
-        void passIt(String s);
-    }
-
-    public void setListener(passtoMyOrders listener)
-    {
-        varToMO = listener ;
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
         setFragment(FRAGMENT_HOME);
-
-
-
-
+        manager=new SessionManager(MainActivity.this);
 
 
        menu_b=findViewById(R.id.bottom_navigation);
@@ -75,7 +57,7 @@ boolean doubleBackToExitPressedOnce = false;
            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                switch (menuItem.getItemId()) {
                    case R.id.home:
-                      // Toast.makeText(getApplicationContext(), "Shop", Toast.LENGTH_SHORT).show();
+                      // Toast.makeText(MainActivity.this, "Shop", Toast.LENGTH_SHORT).show();
                        setFragment(FRAGMENT_HOME);
                        break;
                    case R.id.myorders:
@@ -84,17 +66,17 @@ boolean doubleBackToExitPressedOnce = false;
                            setFragment(FRAGMENT_MYORDERS);
                        }
 
-                       //Toast.makeText(getApplicationContext(), "Shop", Toast.LENGTH_SHORT).show();
+                       //Toast.makeText(MainActivity.this, "Shop", Toast.LENGTH_SHORT).show();
 
                        break;
 
                    case R.id.search:
-                       //Toast.makeText(getApplicationContext(), "Shop", Toast.LENGTH_SHORT).show();
+                       //Toast.makeText(MainActivity.this, "Shop", Toast.LENGTH_SHORT).show();
                        setFragment(FRAGMENT_SEARCH);
                        break;
 
                    case R.id.myaccount:
-                       //Toast.makeText(getApplicationContext(), "Shop", Toast.LENGTH_SHORT).show();
+                       //Toast.makeText(MainActivity.this, "Shop", Toast.LENGTH_SHORT).show();
                        setFragment(FRAGMENT_MYACCOUNT);
                        break;
                }
@@ -213,12 +195,24 @@ boolean doubleBackToExitPressedOnce = false;
 //    }
 
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.menu_top_bar,menu);
+            loginMenu= menu.findItem(R.id.login);
+            logoutMenu=menu.findItem(R.id.logout);
 
-        //if login show and hide some feature
+            if(manager.getKeyEmail()!=null){
+                loginMenu.setVisible(false);
+                logoutMenu.setVisible(true);
+            }
+            else {
+                loginMenu.setVisible(true);
+                logoutMenu.setVisible(false);
+            }
+
+
 
 
 
@@ -230,7 +224,7 @@ boolean doubleBackToExitPressedOnce = false;
 
         switch (item.getItemId()){
             case R.id.login: startActivity(new Intent(this,LoginActivity.class)); break;
-            case R.id.logout: Toast.makeText(this,"Logout click kiya bhai",Toast.LENGTH_SHORT).show(); break;
+            case R.id.logout: manager.logout(MainActivity.this); recreate();break;
         }
         return super.onOptionsItemSelected(item);
     }

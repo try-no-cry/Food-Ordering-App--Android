@@ -8,12 +8,6 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <fragment
-        android:id="@+id/fragLogin"
-        android:name="com.example.newbiz.Login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <TextView
         android:id="@+id/tv"
         android:layout_width="match_parent"

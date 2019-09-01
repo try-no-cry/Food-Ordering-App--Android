@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Entity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -76,9 +77,12 @@ private String name,email,address,contact,pwd;
                  address=etAddress_SignUp.getText().toString().trim();
                  contact=etContact.getText().toString().trim();
                  pwd= etPwd_SignUp.getText().toString().trim();
-
+                String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
                 if(name.isEmpty() || email.isEmpty() || contact.isEmpty() || pwd.isEmpty()){
-                    Snackbar.make(view,"Please fill the required details.",Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(view,"Please fill the required details.",Snackbar.LENGTH_LONG).show();
+                }
+                else if(!email.matches(emailPattern)){
+                    Snackbar.make(view,"Invalid Email-ID.",Snackbar.LENGTH_LONG).show();
                 }
                 else{
                     //fire the query
@@ -99,7 +103,7 @@ private String name,email,address,contact,pwd;
         private static final String KEY_SUCCESS ="success" ;
         private static final String KEY_DATA ="data" ;
         String result="  ";
-        String connstr= MyOrders.CONNECTION +"phpAndroid/";
+        String connstr= MyOrders.CONNECTION +"/phpAndroid/";
 
         @Override
         protected void onPreExecute() {
@@ -119,15 +123,19 @@ private String name,email,address,contact,pwd;
                 Log.d("checkCondition", String.valueOf(check));
 
                 if(check.equals("1")){
-                    SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
-                    editor.putBoolean("loggedIn", true);
-                    editor.putString("name", name);
-                    editor.putString("email", email);
-                    editor.putString("address", address);
-                    editor.putString("contact", contact);
-                    editor.putString("pwd", pwd);
 
-                    editor.apply();
+                    SessionManager manager=new SessionManager(getApplicationContext());
+                    manager.createLoginSession(name,email,address,contact,pwd);
+                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+//                    SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+//                    editor.putBoolean("loggedIn", true);
+//                    editor.putString("name", name);
+//                    editor.putString("email", email);
+//                    editor.putString("address", address);
+//                    editor.putString("contact", contact);
+//                    editor.putString("pwd", pwd);
+//
+//                    editor.apply();
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"This Email-ID is already registered.",Toast.LENGTH_SHORT).show();
@@ -210,27 +218,4 @@ private String name,email,address,contact,pwd;
 
 
 
-    private String getPOSTdataString(JSONObject params) throws Exception {
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
-
-        Iterator<String> itr = params.keys();
-
-        while(itr.hasNext()){
-
-            String key= itr.next();
-            Object value = params.get(key);
-
-            if (first)
-                first = false;
-            else
-                result.append("&");
-
-            result.append(URLEncoder.encode(key, "UTF-8"));
-            result.append("=");
-            result.append(URLEncoder.encode(value.toString(), "UTF-8"));
-
-        }
-        return result.toString();
-    }
 }
