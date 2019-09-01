@@ -1,8 +1,10 @@
 <?php
 include('dbConn.php');
 
+
 $email=$_POST['email'];
 $pwd=$_POST['pwd'];
+    
 
 $response=array();
 $resArray=array();
@@ -10,13 +12,14 @@ $resArray=array();
 
 
 
-$sql="SELECT * FROM users WHERE email=$email";
+$sql="SELECT * FROM users WHERE email='$email'";
 
-if($stmt=$conn->prepare()){
+if($stmt=$conn->prepare($sql)){
     $stmt->execute();
+    
     $result=$stmt->get_result();
 
-    $numOfRows=$result->num_rows();
+    $numOfRows=$result->num_rows;
 
     if($numOfRows>0){
         $row=$result->fetch_assoc();
@@ -45,12 +48,18 @@ if($stmt=$conn->prepare()){
         else {
             // Invalid credentials
             $response["success"]=0;
-             $response["data"]=mysql_error($conn);
+             $response["data"]=mysqli_error($conn);
         }
     }
     else {
         // Invalid credentials
         $response["success"]=0;
-        $response["data"]=mysql_error($conn);
+        $response["data"]=mysqli_error($conn);
     }
 }
+else{
+    $response["success"]=0;
+    $response["data"]=mysqli_error($conn);
+}
+
+echo json_encode($response);
