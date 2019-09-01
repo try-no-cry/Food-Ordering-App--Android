@@ -63,7 +63,8 @@
                 android:layout_marginTop="15sp"
                 android:layout_weight="2"
                 android:ems="10"
-                android:inputType="textWebEmailAddress" />
+                android:inputType="textWebEmailAddress"
+                android:text="Abhay" />
         </LinearLayout>
 
         <LinearLayout
@@ -92,7 +93,8 @@
                 android:layout_marginTop="15sp"
                 android:layout_weight="2"
                 android:ems="10"
-                android:inputType="textWebEmailAddress" />
+                android:inputType="textWebEmailAddress"
+                android:text="iabhayt@gmail.com" />
         </LinearLayout>
 
         <LinearLayout
@@ -121,7 +123,8 @@
                 android:layout_marginTop="15sp"
                 android:layout_weight="2"
                 android:ems="10"
-                android:inputType="phone" />
+                android:inputType="phone"
+                android:text="9892830144" />
         </LinearLayout>
 
         <LinearLayout
@@ -150,7 +153,8 @@
                 android:layout_marginTop="15sp"
                 android:layout_weight="2"
                 android:ems="10"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:text="123" />
         </LinearLayout>
 
 
@@ -182,7 +186,8 @@
                 android:layout_weight="2"
                 android:ems="10"
                 android:hint="(optional)"
-                android:inputType="textPostalAddress" />
+                android:inputType="textPostalAddress"
+                android:text="mhada" />
         </LinearLayout>
 
         <Button

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.icu.text.UnicodeSetSpanner;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -89,23 +90,27 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+
     public class BackgroundTask extends AsyncTask<String,Void,String> {
         AlertDialog.Builder builder;
         private static final String KEY_SUCCESS ="success" ;
         private static final String KEY_DATA ="data" ;
         String result="  ";
-        String connstr= CONNECTION ;
+        String connstr= MyOrders.CONNECTION +"phpAndroid/";
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
+            //Add progress dialog to show insertion
         }
 
         @Override
         protected void onPostExecute(String s) {
-            super.onPostExecute(s);
 
+            super.onPostExecute(s);
             resultFromQuery(s);
+            // JSONArray jsonArray=jsonObject.getJSONArray("success");
 
         }
 
@@ -115,7 +120,6 @@ public class LoginActivity extends AppCompatActivity {
             String email=voids[0];
             String pwd=voids[1];
             String extension=voids[2];
-            //can be: selectOrder.php,insert.php
 
 
             try {
@@ -125,19 +129,18 @@ public class LoginActivity extends AppCompatActivity {
                 http.setDoInput(true);
                 http.setDoOutput(true);
 
-                   OutputStream ops=http.getOutputStream();
+                OutputStream ops=http.getOutputStream();
 
-                 BufferedWriter writer=new BufferedWriter(new OutputStreamWriter(ops,"utf-8"));
-
-                 String data=  URLEncoder.encode("email","UTF-8")+"="+ URLEncoder.encode(email,"UTF-8");
-                 writer.write(data);
-                  writer.flush();
+                BufferedWriter writer=new BufferedWriter(new OutputStreamWriter(ops,"utf-8"));
 
 
-               data=  URLEncoder.encode("pwd","UTF-8")+"="+ URLEncoder.encode(pwd,"UTF-8");
+
+                String data =  URLEncoder.encode("email","UTF-8")+"="+ URLEncoder.encode(email,"UTF-8");
+
+                data +="&" +  URLEncoder.encode("pwd","UTF-8")+"="+ URLEncoder.encode(pwd,"UTF-8");
+
                 writer.write(data);
                 writer.flush();
-
                 writer.close();
                 ops.close();
 
@@ -172,6 +175,8 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
+
     private void resultFromQuery(String data) {
 
 
@@ -188,37 +193,41 @@ public class LoginActivity extends AppCompatActivity {
 
 
                 JSONObject JO=array.getJSONObject(0);
+                String name=JO.getString("name");
+                String email=JO.getString("email");
+                String pwd=JO.getString("pwd");
+                String address=JO.getString("address");
+                String contact=JO.getString("contact");
+
+                SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+                editor.putBoolean("loggedIn", true);  //vvi variable
+                editor.putString("name", name);
+                editor.putString("email", email);
+                editor.putString("address", address);
+                editor.putString("contact", contact);
+                editor.putString("pwd", pwd);
+
+                editor.apply();
 
 
+                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+
+
+
+
+            }
+            else{
+                Toast.makeText(getApplicationContext(),"Invalid Credentials", Toast.LENGTH_SHORT).show();
             }
 
 
 
         } catch (JSONException e) {
             e.printStackTrace();
+//            Toast.makeText(getApplicationContext(),"Please check your internet connection.",Toast.LENGTH_SHORT).show();
+            Log.i("errorMessage",e.getMessage());
         }
 
-
-        if(response.toString().trim().equals("1")){
-            //login successfull
-            //set SharedPref
-            SharedPreferences.Editor editor=getSharedPreferences(MY_PREFS_NAME,MODE_PRIVATE).edit();
-            editor.putBoolean("loggedIn",true);
-            editor.putString("name",name);
-            editor.putString("email",email);
-            editor.putString("address",address);
-            editor.putString("contact",contact);
-            editor.putString("pwd",pwd);
-
-            editor.apply();
-
-            MainActivity mainActivity=new MainActivity();
-            mainActivity.setFragment(MainActivity.FRAGMENT_HOME);
-
-            //go to main activity
-        }else {
-            Toast.makeText(getApplicationContext(),"Invalid Credentials. Please check your input.",Toast.LENGTH_SHORT).show();
-        }
     }
 
 }

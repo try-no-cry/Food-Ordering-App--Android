@@ -50,7 +50,8 @@ import java.util.Objects;
  */
 public class MyOrders extends Fragment  {
 
-protected static String  CONNECTION="https://tonsorial-gear.000webhostapp.com/";
+//protected static String  CONNECTION="https://tonsorial-gear.000webhostapp.com/";
+protected static String  CONNECTION="http://192.168.43.77/";
 //private TextView tvMyOrders;
 private  BackgroundTask backgroundTask;
 static  String resultFromQuery;

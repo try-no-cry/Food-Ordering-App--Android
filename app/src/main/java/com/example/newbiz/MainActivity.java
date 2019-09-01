@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Display;
@@ -27,6 +28,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
 //        implements Home.fromHomeFragToactivity, CardsAdapter.ItemSelected
 {
+
+
 private BottomNavigationView menu_b;
 boolean doubleBackToExitPressedOnce = false;
  boolean at_home= false;
@@ -42,7 +45,7 @@ boolean doubleBackToExitPressedOnce = false;
     public static final int FRAGMENT_SEARCH= 3;
     public static final int FRAGMENT_MYACCOUNT=4;
     private Object passtoMyOrders;
-
+    SharedPreferences sharedpreferences;
 
     passtoMyOrders varToMO;
     public interface passtoMyOrders{
@@ -57,9 +60,10 @@ boolean doubleBackToExitPressedOnce = false;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
         setFragment(FRAGMENT_HOME);
 
-       myOrders=new MyOrders();
+
 
 
 

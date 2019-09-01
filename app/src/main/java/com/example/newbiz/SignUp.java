@@ -3,6 +3,7 @@ package com.example.newbiz;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Entity;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,8 +12,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -25,6 +31,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import static com.example.newbiz.MyOrders.CONNECTION;
 
@@ -73,6 +82,7 @@ private String name,email,address,contact,pwd;
                 }
                 else{
                     //fire the query
+
                     BackgroundTask backgroundTask=new BackgroundTask();
                     backgroundTask.execute(name,email,address,contact,pwd,"signUp.php");
 
@@ -83,39 +93,52 @@ private String name,email,address,contact,pwd;
 
     }
 
+
     public class BackgroundTask extends AsyncTask<String,Void,String> {
         AlertDialog.Builder builder;
         private static final String KEY_SUCCESS ="success" ;
         private static final String KEY_DATA ="data" ;
         String result="  ";
-        String connstr= CONNECTION ;
+        String connstr= MyOrders.CONNECTION +"phpAndroid/";
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
+            //Add progress dialog to show insertion
         }
 
         @Override
         protected void onPostExecute(String s) {
+
             super.onPostExecute(s);
 
-            //go to main activity
-            //set shared preferences
-            SharedPreferences.Editor editor=getSharedPreferences(MY_PREFS_NAME,MODE_PRIVATE).edit();
-            editor.putBoolean("loggedIn",true);
-            editor.putString("name",name);
-            editor.putString("email",email);
-            editor.putString("address",address);
-            editor.putString("contact",contact);
-            editor.putString("pwd",pwd);
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+                String check=jsonObject.getString("success");
+                Log.d("checkCondition", String.valueOf(check));
 
-            editor.apply();
+                if(check.equals("1")){
+                    SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+                    editor.putBoolean("loggedIn", true);
+                    editor.putString("name", name);
+                    editor.putString("email", email);
+                    editor.putString("address", address);
+                    editor.putString("contact", contact);
+                    editor.putString("pwd", pwd);
 
-            MainActivity mainActivity=new MainActivity();
-            mainActivity.setFragment(MainActivity.FRAGMENT_HOME);
+                    editor.apply();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"This Email-ID is already registered.",Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
 
+            }
+            // JSONArray jsonArray=jsonObject.getJSONArray("success");
 
-                    }
+        }
 
         @Override
         protected String doInBackground(String... voids) {
@@ -128,7 +151,6 @@ private String name,email,address,contact,pwd;
 
 
             String extension=voids[5];
-            //can be: selectOrder.php,insert.php
 
 
             try {
@@ -142,30 +164,16 @@ private String name,email,address,contact,pwd;
 
                 BufferedWriter writer=new BufferedWriter(new OutputStreamWriter(ops,"utf-8"));
 
+
                 String data=  URLEncoder.encode("name","UTF-8")+"="+ URLEncoder.encode(name,"UTF-8");
+
+                data +="&" +  URLEncoder.encode("email","UTF-8")+"="+ URLEncoder.encode(email,"UTF-8");
+                data +="&" +  URLEncoder.encode("address","UTF-8")+"="+ URLEncoder.encode(address,"UTF-8");
+                data +="&" +  URLEncoder.encode("contact","UTF-8")+"="+ URLEncoder.encode(contact,"UTF-8");
+                data +="&" +  URLEncoder.encode("pwd","UTF-8")+"="+ URLEncoder.encode(pwd,"UTF-8");
+
                 writer.write(data);
                 writer.flush();
-
-
-                data=  URLEncoder.encode("email","UTF-8")+"="+ URLEncoder.encode(email,"UTF-8");
-                writer.write(data);
-                writer.flush();
-
-
-                data=  URLEncoder.encode("address","UTF-8")+"="+ URLEncoder.encode(address,"UTF-8");
-                writer.write(data);
-                writer.flush();
-
-                data=  URLEncoder.encode("contact","UTF-8")+"="+ URLEncoder.encode(contact,"UTF-8");
-                writer.write(data);
-                writer.flush();
-
-
-
-                data=  URLEncoder.encode("pwd","UTF-8")+"="+ URLEncoder.encode(pwd,"UTF-8");
-                writer.write(data);
-                writer.flush();
-
                 writer.close();
                 ops.close();
 
@@ -202,4 +210,27 @@ private String name,email,address,contact,pwd;
 
 
 
+    private String getPOSTdataString(JSONObject params) throws Exception {
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+
+        Iterator<String> itr = params.keys();
+
+        while(itr.hasNext()){
+
+            String key= itr.next();
+            Object value = params.get(key);
+
+            if (first)
+                first = false;
+            else
+                result.append("&");
+
+            result.append(URLEncoder.encode(key, "UTF-8"));
+            result.append("=");
+            result.append(URLEncoder.encode(value.toString(), "UTF-8"));
+
+        }
+        return result.toString();
+    }
 }

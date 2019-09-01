@@ -30,6 +30,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.azoft.carousellayoutmanager.CarouselLayoutManager;
+import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
+
 import java.util.ArrayList;
 
 
@@ -185,6 +188,8 @@ ArrayList<Single_Card> list=new ArrayList<>();
 
         CardsAdapter myadapter=new CardsAdapter(list,getContext());
         layoutManager=new LinearLayoutManager(getContext());
+//        final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, true);
+//        layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
 
 
         recyclerView.setLayoutManager(layoutManager);
