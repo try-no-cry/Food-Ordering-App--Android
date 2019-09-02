@@ -117,9 +117,9 @@ SessionManager manager;
              //  MyOrders.BackgroundTask backgroundTask= myOrders.BackgroundTask(OrderPage.this,null);
 
                 //trying to insert into the db
-                int foodCardID=1;
-                int userID=23;
-                String supplyAddress=myFood.getAddress();
+                int foodCardID=1;  //idhar kaise find karenge foodcard id   (crying)😭
+                String userID= (prefs.getString("user_id",""));
+                String supplyAddress=etAddress.getText().toString().trim();
                 String foodName=myFood.getFoodName();
                 float totalPrice=Float.parseFloat(myFood.getFoodPrice())*Float.parseFloat(etQuantity.getText().toString());
 //                        + Float.parseFloat(tvTaxes.getText().toString());
@@ -138,7 +138,7 @@ BackgroundTask backgroundTask=new BackgroundTask();
                 String sql="INSERT INTO orders(foodcard_id,user_id,quantity,supplyAddress,totalPrice," +
                         "orderStatus,orderDate,orderTime)" +
                         " VALUES("+foodCardID +","+
-                        userID +", "
+                        Integer.parseInt(userID) +", "
                         +Float.parseFloat(etQuantity.getText().toString())+","
                         +"'"+ supplyAddress + "'"+","
                         +totalPrice  +","
@@ -196,7 +196,7 @@ BackgroundTask backgroundTask=new BackgroundTask();
         private static final String KEY_SUCCESS ="success" ;
         private static final String KEY_DATA ="data" ;
         String result="  ";
-        String connstr="http://"+ MyOrders.CONNECTION +"/phpAndroid/";
+        String connstr= MyOrders.CONNECTION +"/phpAndroid/";
 
         @Override
         protected void onPreExecute() {

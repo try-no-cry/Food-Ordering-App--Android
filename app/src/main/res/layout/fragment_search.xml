@@ -20,23 +20,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="2sp">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+`
 
-    android:orientation="vertical"
-    android:weightSum="1"
-   >
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/searchRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0sp"
-        android:layout_weight="1"
-        android:layout_marginTop="5sp"
-        android:background="#efefef"
-        android:nestedScrollingEnabled="true"/><!-- set query string of an search view -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0sp"
 
-</LinearLayout>
+            android:orientation="vertical"
+            android:weightSum="1.25">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/searchRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0sp"
+                android:layout_marginTop="5sp"
+                android:layout_weight="1.25"
+                android:background="#efefef"
+                android:nestedScrollingEnabled="true" /><!-- set query string of an search view -->
+
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

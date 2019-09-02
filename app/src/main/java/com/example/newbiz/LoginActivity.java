@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//Set Back Icon on Activity
 
         tvLogin_title=findViewById(R.id.login_title);
         tvForgetPwd=findViewById(R.id.tvForgetPwd);
@@ -190,6 +191,7 @@ public class LoginActivity extends AppCompatActivity {
 
             if(check.equals("1")){
                 //login successful
+                String uid= String.valueOf(jsonObject.getInt("user_id"));
 
                 JSONArray array=jsonObject.getJSONArray("data");
 
@@ -203,7 +205,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
                 SessionManager manager=new SessionManager(getApplicationContext());
-                manager.createLoginSession(name,email,address,contact,pwd);
+                manager.createLoginSession(uid,name,email,address,contact,pwd);
                 startActivity(new Intent(getApplicationContext(),MainActivity.class));
 //                SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
 //                editor.putBoolean("loggedIn", true);  //vvi variable

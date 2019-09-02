@@ -44,6 +44,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,7 +61,7 @@ private RecyclerView myOrdersRecycler;
 private RecyclerView.Adapter adapter;
 private RecyclerView.LayoutManager layoutManager;
 private ArrayList<MyOrders_SingleOrder> list=new ArrayList<>();
-
+SharedPreferences prefs;
 //    public MyOrders() {
 //        // Required empty public constructor
 //    }
@@ -72,6 +74,8 @@ private ArrayList<MyOrders_SingleOrder> list=new ArrayList<>();
         View v=inflater.inflate(R.layout.fragment_my_orders, container, false);
       // tvMyOrders=v.findViewById(R.id.tvMyOrders);
         myOrdersRecycler=v.findViewById(R.id.myOrdersFragRecycler);
+        prefs = getContext().getSharedPreferences("UserInfo", MODE_PRIVATE);
+
 
 
 
@@ -237,6 +241,7 @@ private ArrayList<MyOrders_SingleOrder> list=new ArrayList<>();
 
 //            String sql=voids[0];
             String extension=voids[0];
+            String email=prefs.getString("email","");
             //can be: selectOrder.php,insert.php
 
 
@@ -247,16 +252,16 @@ private ArrayList<MyOrders_SingleOrder> list=new ArrayList<>();
                 http.setDoInput(true);
                 http.setDoOutput(true);
 
-             //   OutputStream ops=http.getOutputStream();
+                OutputStream ops=http.getOutputStream();
 
-               // BufferedWriter writer=new BufferedWriter(new OutputStreamWriter(ops,"utf-8"));
+                BufferedWriter writer=new BufferedWriter(new OutputStreamWriter(ops,"utf-8"));
 
-               // String data=  URLEncoder.encode("sql","UTF-8")+"="+URLEncoder.encode(sql,"UTF-8");
+                String data=  URLEncoder.encode("email","UTF-8")+"="+URLEncoder.encode(email,"UTF-8");
 
-              //  writer.write(data);
-              //  writer.flush();
-//                writer.close();
-//                ops.close();
+                writer.write(data);
+                writer.flush();
+                writer.close();
+                ops.close();
 
 
                 InputStream ips=http.getInputStream();

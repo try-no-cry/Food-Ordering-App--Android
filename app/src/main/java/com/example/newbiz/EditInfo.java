@@ -49,6 +49,7 @@ public class EditInfo extends AppCompatActivity {
         setContentView(R.layout.activity_edit_info);
 
         prefs = getSharedPreferences("UserInfo", MODE_PRIVATE);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//Set Back Icon on Activity
 
         //we'll come here only if user is logged in
         editPage_title=findViewById(R.id.editPage_title);

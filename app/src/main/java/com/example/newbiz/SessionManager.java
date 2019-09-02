@@ -26,6 +26,8 @@ public class SessionManager {
     public static final String KEY_NAME = "name";
     // Email address (make variable public to access from outside)
     public static final String KEY_EMAIL = "email";
+    public static final String KEY_UID= "user_id";
+
     public static final String KEY_ADDRESS = "address";
     public static final String KEY_CONTACT = "contact";
     public static final String KEY_PWD = "pwd";
@@ -42,7 +44,7 @@ public class SessionManager {
 //        return getSharedPreferences(PREF_NAME,PRIVATE_MODE);
 //    }
 
-    public void createLoginSession(String name, String email,String address,String contact,String pwd){
+    public void createLoginSession(String uid,String name, String email,String address,String contact,String pwd){
 
 
         // Storing login value as TRUE
@@ -50,6 +52,7 @@ public class SessionManager {
 
         // Storing name in pref
         editor.putString(KEY_NAME, name);
+        editor.putString(KEY_UID,uid);
 
         // Storing email in pref
         editor.putString(KEY_EMAIL, email);
@@ -65,6 +68,10 @@ public class SessionManager {
     public  String getKeyName() {
 
         return pref.getString(KEY_NAME,null);
+    }
+    public  String getKeyUid() {
+
+        return pref.getString(KEY_UID,null);
     }
 
     public  String getKeyEmail() {

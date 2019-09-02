@@ -48,6 +48,7 @@ private String name,email,address,contact,pwd;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//Set Back Icon on Activity
 
         signUp_title=findViewById(R.id.signUp_title);
 
@@ -123,9 +124,10 @@ private String name,email,address,contact,pwd;
                 Log.d("checkCondition", String.valueOf(check));
 
                 if(check.equals("1")){
-
+                    String uid= String.valueOf(jsonObject.getInt("user_id"));
                     SessionManager manager=new SessionManager(getApplicationContext());
-                    manager.createLoginSession(name,email,address,contact,pwd);
+                    manager.createLoginSession(uid,name,email,address,contact,pwd);
+                    Toast.makeText(SignUp.this,"Registration Succesful \uD83D\uDC4D",Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getApplicationContext(),MainActivity.class));
 //                    SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
 //                    editor.putBoolean("loggedIn", true);
