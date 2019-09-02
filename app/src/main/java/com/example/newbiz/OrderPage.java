@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,6 +44,7 @@ tvAddressLabel,etAddress,
 tvTaxesLabel,tvTaxes,
 tvTotalLabel,tvTotal;
 private Single_Card myFood;
+    SharedPreferences prefs;
 
 private float totalPrice;
 private Button btnCalculateTotal,btnPlaceOrder;
@@ -55,6 +57,8 @@ SessionManager manager;
 
       hideKeyboard(this);
       manager=new SessionManager(OrderPage.this);
+        prefs = getSharedPreferences("UserInfo",
+                MODE_PRIVATE);
 
         tvFoodBillLabel=findViewById(R.id.tvFoodBillLabel);
         ivFoodImage=findViewById(R.id.ivFoodImage);
@@ -74,8 +78,8 @@ SessionManager manager;
         btnPlaceOrder=findViewById(R.id.btnPlaceOrder);
 
 
-        if(manager.getKeyAddress()!=null){
-            etAddress.setText(manager.getKeyAddress());
+        if(prefs.getString("address",null)!=null){
+            etAddress.setText(prefs.getString("address",""));
         }
         else{
             etAddress.setText("");
@@ -89,7 +93,7 @@ SessionManager manager;
         tvFoodName.setText(myFood.getFoodName());
         tvStdPrice.setText("₹"+myFood.getFoodPrice());
         etQuantity.setText("1");
-        etAddress.setText("get address if login else ask to login");
+
         tvTaxes.setText("GST & others");
 
         btnCalculateTotal.setOnClickListener(new View.OnClickListener() {

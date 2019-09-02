@@ -34,6 +34,7 @@ public class SessionManager {
     public SessionManager(Context context) {
         this.context = context;
         pref = context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+
         editor = pref.edit();
     }
 
@@ -42,6 +43,8 @@ public class SessionManager {
 //    }
 
     public void createLoginSession(String name, String email,String address,String contact,String pwd){
+
+
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
 

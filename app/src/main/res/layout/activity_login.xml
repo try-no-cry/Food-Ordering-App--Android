@@ -63,7 +63,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textEmailAddress"
-                android:text="iaasd" />
+                android:text="a@a.a" />
         </LinearLayout>
 
         <LinearLayout
@@ -93,7 +93,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="textPassword"
-                android:text="aefsgs" />
+                android:text="123" />
         </LinearLayout>
 
         <TextView

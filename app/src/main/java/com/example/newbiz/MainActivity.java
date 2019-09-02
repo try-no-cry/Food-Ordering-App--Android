@@ -41,6 +41,7 @@ SessionManager manager;
     private MenuItem loginMenu,logoutMenu;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

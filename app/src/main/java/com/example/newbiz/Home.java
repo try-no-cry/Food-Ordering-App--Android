@@ -43,7 +43,6 @@ public class Home extends Fragment
 //        implements CardsAdapter.ItemSelected
 {
 private  Single_Card single_card;
-TextView tv;
 private float initialX;
 private ViewFlipper viewFlipper;
 private GestureDetector mGestureDetector;
@@ -89,7 +88,6 @@ ArrayList<Single_Card> list=new ArrayList<>();
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        tv=view.findViewById(R.id.tv);
         recyclerView=view.findViewById(R.id.cardsList);
         slideRecycler=view.findViewById(R.id.slideRecycler);
         //slide start
