@@ -1,5 +1,6 @@
 package com.example.newbiz;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -8,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,6 +38,8 @@ private TextView tvOldPwd,tvNewPwd,tvNewPwdConf;
 private EditText etOldPwd,etNewPwd,etNewPwdConf;
 private Button btnChangePassword;
  SharedPreferences prefs;
+    private String newPwdConf,oldPwd,newPwd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +47,8 @@ private Button btnChangePassword;
         tvOldPwd=findViewById(R.id.tvOldPwd);
         tvNewPwd=findViewById(R.id.tvNewPwd);
         tvNewPwdConf=findViewById(R.id.tvNewPwdConf);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         etOldPwd=findViewById(R.id.etOldPwd);
         etNewPwd=findViewById(R.id.etNewPwd);
@@ -54,9 +60,9 @@ private Button btnChangePassword;
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String oldPwd=etOldPwd.getText().toString().trim();
-                String newPwd=etNewPwd.getText().toString().trim();
-                String newPwdConf=etNewPwdConf.getText().toString().trim();
+                oldPwd=etOldPwd.getText().toString().trim();
+               newPwd=etNewPwd.getText().toString().trim();
+                newPwdConf=etNewPwdConf.getText().toString().trim();
 
                 if(oldPwd.isEmpty() || newPwd.isEmpty() || newPwdConf.isEmpty()){
                     Snackbar.make(view,"Please fill the requirements.",Snackbar.LENGTH_LONG).show();
@@ -108,6 +114,9 @@ private Button btnChangePassword;
 
                     Toast.makeText(getApplicationContext(),"Password Changed",Toast.LENGTH_SHORT).show();
                     prefs.edit().clear().apply();
+
+                  SessionManager  manager=new SessionManager(getApplicationContext());
+                    manager.createLoginSession(prefs.getString("user_id",""),prefs.getString("name",""),prefs.getString("email",""),prefs.getString("address",""),prefs.getString("contact",""),newPwd);
                     finish();
 
                 }
@@ -186,6 +195,19 @@ private Button btnChangePassword;
 
             return result;
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//
+//        switch (item.getItemId()){
+//            case  R.id.home:finish(); break;
+//        }
+
+        finish();
+
+        return super.onOptionsItemSelected(item);
+
     }
 
 }

@@ -2,6 +2,7 @@ package com.example.newbiz;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -42,12 +43,17 @@ public class LoginActivity extends AppCompatActivity {
     private TextView tvLogin_title,tvForgetPwd,tvUName,tvPwd;
     private EditText etUName,etPwd;
     private Button btnLogin,btnGoToSignUp;
-
+    private  boolean giveResultToOrder=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);//Set Back Icon on Activity
+
+
+        if(getCallingActivity()!=null)  //to know if we have to go back to an order
+            giveResultToOrder=true;
+
 
         tvLogin_title=findViewById(R.id.login_title);
         tvForgetPwd=findViewById(R.id.tvForgetPwd);
@@ -218,7 +224,14 @@ public class LoginActivity extends AppCompatActivity {
 //                editor.apply();
 
 
-                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                if(!giveResultToOrder)
+                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                else {
+                    Intent returnIntent = new Intent();
+
+                    setResult(Activity.RESULT_OK,returnIntent);
+                    finish();
+                }
 
 
 

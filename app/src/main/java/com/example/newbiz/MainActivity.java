@@ -38,6 +38,7 @@ public static final int FRAGMENT_MYORDERS= 2;
 public static final int FRAGMENT_SEARCH= 3;
 public static final int FRAGMENT_MYACCOUNT=4;
 SessionManager manager;
+SharedPreferences prefs;
     private MenuItem loginMenu,logoutMenu;
 
 
@@ -49,6 +50,7 @@ SessionManager manager;
 
         setFragment(FRAGMENT_HOME);
         manager=new SessionManager(MainActivity.this);
+        prefs=getSharedPreferences("UserInfo",MODE_PRIVATE);
 
 
        menu_b=findViewById(R.id.bottom_navigation);
@@ -110,7 +112,7 @@ SessionManager manager;
                 //ft.add(new Search(),"SEARCH_FRAGMENT");break;
 
             case  FRAGMENT_MYACCOUNT:
-                ft.replace(R.id.main_activity_yes,new MyAccount(),"MYACCOUNT_FRAGMENT"); break;
+                 ft.replace(R.id.main_activity_yes,new MyAccount(),"MYACCOUNT_FRAGMENT");  break;
                // ft.add(new MyAccount(),"MYACCOUNT_FRAGMENT");break;
 
             default: ft.replace(R.id.main_activity_yes,new Home(),"HOME_FRAGMENT"); break;
@@ -161,39 +163,6 @@ SessionManager manager;
 
 
     }
-////
-//    @Override
-//    public void passThisData(final String data) {
-//        Bundle bundle = new Bundle();
-//        bundle.putString("data",data);
-//// set Fragmentclass Arguments
-//        MyOrders fragobj = new MyOrders();
-//        fragobj.setArguments(bundle);
-//        MyOrders.resultFromQuery=data;
-////        setListener((MainActivity.passtoMyOrders) passtoMyOrders);
-////
-////      varToMO.passIt(data);
-//       // myOrders.setTextView(data);
-//
-//
-//
-//
-//    }
-
-
-//    @Override
-//    public void PassToAcivity(ArrayList<Single_Card> list) {
-//        cardsList=new ArrayList<>(list);
-//
-//
-//
-//    }
-//
-//    @Override
-//    public void onItemClick(int index) {
-//        Toast.makeText(this,cardsList.get(index).getFoodName(),Toast.LENGTH_SHORT).show();
-//
-//    }
 
 
 
@@ -203,8 +172,8 @@ SessionManager manager;
         getMenuInflater().inflate(R.menu.menu_top_bar,menu);
             loginMenu= menu.findItem(R.id.login);
             logoutMenu=menu.findItem(R.id.logout);
-
-            if(manager.getKeyEmail()!=null){
+prefs=getSharedPreferences("UserInfo",MODE_PRIVATE);
+            if(prefs.getString("email","")!=""){
                 loginMenu.setVisible(false);
                 logoutMenu.setVisible(true);
             }
@@ -226,6 +195,7 @@ SessionManager manager;
         switch (item.getItemId()){
             case R.id.login: startActivity(new Intent(this,LoginActivity.class)); break;
             case R.id.logout: manager.logout(MainActivity.this); recreate();break;
+
         }
         return super.onOptionsItemSelected(item);
     }

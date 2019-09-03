@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,10 +19,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,7 +89,9 @@ SharedPreferences prefs;
         backgroundTask=new BackgroundTask();
 
       //  String sql="SELECT * FROM orders ORDER BY id DESC";
-        backgroundTask.execute("fillMyOrders.php");
+        if(!prefs.getString("email", "").equals(""))
+                 backgroundTask.execute("fillMyOrders.php");
+//        else startActivity(new Intent(getContext(),LoginActivity.class));
         return v;
 
     }
@@ -101,11 +106,14 @@ SharedPreferences prefs;
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-       // tvMyOrders=getView().findViewById(R.id.tvMyOrders);
+    public void onStart() {
+        super.onStart();
+        if(prefs.getString("email", "").equals(""))
+            setEmptyMsg("Please Login to see your orders.");
 
     }
+
+
 
     @Override
     public void onDestroyView() {
@@ -171,6 +179,10 @@ SharedPreferences prefs;
              //JSONArray jsonArray=jsonObject.getJSONArray("data");
                 jsonArray=jsonObject.getJSONArray("data");
                 int count=0;
+                if(jsonArray.length()==0)
+                {
+                    setEmptyMsg("No orders given till now.");
+                }
 
                 String imageUrl,foodName,orderDate,orderStatus,order_id;
                 while(count<jsonArray.length()){
@@ -216,6 +228,17 @@ SharedPreferences prefs;
 
     }
 
+    private void setEmptyMsg(String msg) {
+        LinearLayout linearLayout=getView().findViewById(R.id.myOrdersLayout);
+        TextView textView=new TextView(getContext());
+        textView.setText(msg);
+        textView.setTextSize(30);
+        textView.setTextColor(Color.RED);
+        textView.setGravity(Gravity.CENTER);
+
+        linearLayout.addView(textView);
+    }
+
 
     public class BackgroundTask extends AsyncTask<String,Void,String> {
         AlertDialog.Builder builder;
@@ -232,7 +255,9 @@ SharedPreferences prefs;
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            setRecyclerView(result);
+            if(!s.equals(""))
+                 setRecyclerView(result);
+            else setEmptyMsg("No order has been given till now");
 
         }
 
@@ -284,9 +309,12 @@ SharedPreferences prefs;
             } catch (MalformedURLException e) {
                 e.printStackTrace();
                 Log.i("Message1",e.getMessage());
+                Toast.makeText(getContext(),"Error. Please Try Again.",Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.i("Message2",e.getMessage());
+                Toast.makeText(getContext(),"Error. Please Try Again.",Toast.LENGTH_SHORT).show();
+
             }
 
 

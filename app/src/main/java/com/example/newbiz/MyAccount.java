@@ -10,6 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -41,7 +44,6 @@ SharedPreferences prefs;
         View v=inflater.inflate(R.layout.fragment_my_account, container, false);
         tvGreeting=v.findViewById(R.id.tvGreeting);
 
-        prefs = getContext().getSharedPreferences("UserInfo", MODE_PRIVATE);
 
         tvEmail_Account=v.findViewById(R.id.tvEmail_Account);
         tvContact_Account=v.findViewById(R.id.tvContact_Account);
@@ -54,12 +56,53 @@ SharedPreferences prefs;
         btnLogin_Account=v.findViewById(R.id.btnLogin_Account);
         btnSignUp_Account=v.findViewById(R.id.btnSignUp_Account);
 
-        if(prefs.getString("email",null)!=null){
+
+
+
+        return v;
+    }
+
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//
+//        setUserVisibleHint(true);
+//    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+menu.clear();
+        inflater.inflate(R.menu.menu_top_bar,menu);
+       MenuItem loginMenu= menu.findItem(R.id.login);
+       MenuItem logoutMenu=menu.findItem(R.id.logout);
+        if(prefs.getString("email","")!=""){
+            loginMenu.setVisible(false);
+            logoutMenu.setVisible(true);
+        }
+        else {
+            loginMenu.setVisible(true);
+            logoutMenu.setVisible(false);
+        }
+
+    }
+
+    @Override
+    public void onResume() {
+        setHasOptionsMenu(true);
+
+        super.onResume();
+        prefs = getContext().getSharedPreferences("UserInfo", MODE_PRIVATE);
+
+        if(!prefs.getString("email", "").equals("")){
 
             loggedIn.setVisibility(View.VISIBLE);
             loggedOut.setVisibility(View.GONE);
 
+
             setData();
+
 
         }
         else{
@@ -69,10 +112,8 @@ SharedPreferences prefs;
         }
 
 
-
-        return v;
+//        setData();
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -115,6 +156,8 @@ SharedPreferences prefs;
 
 
     }
+
+
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {

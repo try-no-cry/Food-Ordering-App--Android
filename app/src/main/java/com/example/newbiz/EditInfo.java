@@ -1,5 +1,6 @@
 package com.example.newbiz;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -11,6 +12,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,6 +45,9 @@ public class EditInfo extends AppCompatActivity {
     private Button btn_updateDetails;
     private SharedPreferences prefs;
     private String name,email,address,contact;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,13 +140,16 @@ public class EditInfo extends AppCompatActivity {
                     prefs.edit().putString("email",email);
                     prefs.edit().putString("address",address);
                     prefs.edit().putString("contact",contact);
+    prefs.edit().commit();
 
-                    while (!prefs.edit().commit()){
-                        ProgressBar progressBar=new ProgressBar(getApplicationContext());
-                        progressBar.setIndeterminate(true);
-//                        progressBar.setIndeterminateDrawable(R.drawable.custom_progress_bar);
-
-                    }
+                    manager=new SessionManager(getApplicationContext());
+                    manager.createLoginSession(prefs.getString("user_id",""),name,email,address,contact,prefs.getString("pwd",""));
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    ft.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                    ft.replace(R.id.editInfoLayout,new MyAccount(),"MYACCOUNT_FRAGMENT");
+//
+//                    MyAccount account=new MyAccount();
+//                                        account.setUserVisibleHint(true);
                     Toast.makeText(getApplicationContext(),"Info Updated.",Toast.LENGTH_SHORT).show();
 
 
@@ -230,5 +238,18 @@ public class EditInfo extends AppCompatActivity {
             return result;
         }
     }
+
+        @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case android.R.id.home: finish(); break;
+//            default:
+//        }
+        finish();
+        return super.onOptionsItemSelected(item);
+
+    }
+
+
 
 }

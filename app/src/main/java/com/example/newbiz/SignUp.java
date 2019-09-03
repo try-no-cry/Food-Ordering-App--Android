@@ -129,15 +129,7 @@ private String name,email,address,contact,pwd;
                     manager.createLoginSession(uid,name,email,address,contact,pwd);
                     Toast.makeText(SignUp.this,"Registration Succesful \uD83D\uDC4D",Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getApplicationContext(),MainActivity.class));
-//                    SharedPreferences.Editor editor = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
-//                    editor.putBoolean("loggedIn", true);
-//                    editor.putString("name", name);
-//                    editor.putString("email", email);
-//                    editor.putString("address", address);
-//                    editor.putString("contact", contact);
-//                    editor.putString("pwd", pwd);
-//
-//                    editor.apply();
+
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"This Email-ID is already registered.",Toast.LENGTH_SHORT).show();

@@ -15,7 +15,7 @@
         android:layout_marginBottom="20sp"
         android:background="#00F37171"
         android:elevation="20sp"
-        android:padding="0sp"
+        android:padding="2sp"
         app:cardBackgroundColor="#00F7D3D3"
         app:cardCornerRadius="5sp"
         app:contentPadding="5sp">
@@ -44,7 +44,7 @@
                     android:layout_weight="1"
                     android:text="Name"
                     android:textColor="#EE1B1B"
-                    android:textSize="30sp" />
+                    android:textSize="15sp" />
 
 
                 <TextView
@@ -54,7 +54,7 @@
                     android:layout_weight="1"
                     android:text="Price"
                     android:textColor="#38C83C"
-                    android:textSize="20sp" />
+                    android:textSize="15sp" />
 
 
             </LinearLayout>
@@ -66,21 +66,21 @@
 
                 <TextView
                     android:id="@+id/tvAreaName"
-                    android:layout_width="0sp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.3"
                     android:text="Address"
                     android:textColor="#3B9287"
-                    android:textSize="20sp" />
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/tvAnyOtherInfo"
-                    android:layout_width="0sp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:text="AnyOther info"
                     android:textColor="#07470A"
-                    android:textSize="20sp" />
+                    android:textSize="13sp" />
 
 
             </LinearLayout>

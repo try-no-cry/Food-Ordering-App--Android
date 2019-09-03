@@ -1,5 +1,7 @@
 package com.example.newbiz;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -10,6 +12,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -50,6 +53,18 @@ private float totalPrice;
 private Button btnCalculateTotal,btnPlaceOrder;
 
 SessionManager manager;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+            //great
+        }
+        else{
+            finish();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,17 +92,22 @@ SessionManager manager;
         btnCalculateTotal=findViewById(R.id.btnCalculateTotal);
         btnPlaceOrder=findViewById(R.id.btnPlaceOrder);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//Set Back Icon on Activity
+
+
 
         if(prefs.getString("address",null)!=null){
             etAddress.setText(prefs.getString("address",""));
         }
         else{
-            etAddress.setText("");
+            startActivityForResult(new Intent(OrderPage.this,LoginActivity.class),0);
+
+
 
         }
         Intent intent=this.getIntent();
         Bundle bundle=intent.getExtras();
-         myFood= (Single_Card) bundle.getSerializable("single_card");
+         myFood= (Single_Card) bundle.getSerializable("single_card");   //data came after clicking food card
 
         Glide.with(this).load(myFood.getImageUrl()).into(ivFoodImage);
         tvFoodName.setText(myFood.getFoodName());
@@ -117,7 +137,7 @@ SessionManager manager;
              //  MyOrders.BackgroundTask backgroundTask= myOrders.BackgroundTask(OrderPage.this,null);
 
                 //trying to insert into the db
-                int foodCardID=1;  //idhar kaise find karenge foodcard id   (crying)😭
+                int foodCardID= Integer.parseInt(myFood.getFoodCard_id().trim());  //idhar kaise find karenge foodcard id   (crying)😭
                 String userID= (prefs.getString("user_id",""));
                 String supplyAddress=etAddress.getText().toString().trim();
                 String foodName=myFood.getFoodName();
@@ -267,4 +287,18 @@ BackgroundTask backgroundTask=new BackgroundTask();
             return result;
         }
     }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+//        switch (item.getItemId()){
+//            case  R.id.home:finish(); break;
+//        }
+        finish();
+
+        return super.onOptionsItemSelected(item);
+
+    }
+
+
 }

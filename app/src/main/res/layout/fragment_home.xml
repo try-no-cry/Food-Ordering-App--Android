@@ -54,7 +54,7 @@
 
             <!-- TODO: Update blank fragment layout -->
 
-            <androidx.recyclerview.widget.RecyclerView
+            z<androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/slideRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="0sp"

@@ -62,6 +62,8 @@ private Context context;
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
+        final String foodcard_id=list.get(position).getFoodCard_id();
+        final String food_id=list.get(position).getFood_id();
         final String imageUrl = list.get(position).getImageUrl();
         final String foodName = list.get(position).getFoodName();
         final String Price = list.get(position).getFoodPrice();
@@ -84,6 +86,8 @@ private Context context;
                 Intent intent=new Intent(context,OrderPage.class);
 
                 Single_Card single_card=new Single_Card();
+                single_card.setFoodCard_id(foodcard_id);
+                single_card.setFood_id(food_id);
                 single_card.setImageUrl(imageUrl);
                 single_card.setFoodName(foodName);
                 single_card.setFoodPrice(Price);

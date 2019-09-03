@@ -15,7 +15,8 @@
         android:layout_marginBottom="15sp"
         android:elevation="10sp"
         android:padding="10px"
-        app:cardCornerRadius="10sp">
+        app:cardCornerRadius="10sp"
+        app:contentPadding="3sp">
 
         <LinearLayout
             android:layout_width="match_parent"
