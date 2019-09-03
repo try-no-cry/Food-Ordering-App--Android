@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +37,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+
+import javax.net.ssl.SNIHostName;
 
 public class order_detail_on_click extends AppCompatActivity {
     private TextView tvStatusLabel_Ordered,tvFoodStatus_Ordered;
@@ -98,32 +101,37 @@ public class order_detail_on_click extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //show alert dialog to confirm the cancellation
-                final AlertDialog.Builder builder=new AlertDialog.Builder(order_detail_on_click.this);
-                builder.setTitle("Confirm Cancelllation");
-                builder.setMessage("Are you sure of cancelling this order?");
-                builder.setCancelable(true);
-                builder.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //go to implement to cancel this order
-                        //also inform the admin
-                        BackgroundTask backgroundTask1=new BackgroundTask();
-                        backgroundTask1.execute(order_id,"cancelThisOrder.php");
-                    }
-                });
 
-                builder.setNegativeButton("NO",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //go to implement to cancel this order
-                        //also inform the admin
+                if(status.equals("Cancelled")){
+                    Snackbar.make(view,"This order is already cancelled.", Snackbar.LENGTH_LONG).show();
+                }
+                else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(order_detail_on_click.this);
+                    builder.setTitle("Confirm Cancelllation");
+                    builder.setMessage("Are you sure of cancelling this order?");
+                    builder.setCancelable(true);
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //go to implement to cancel this order
+                            //also inform the admin
+                            BackgroundTask backgroundTask1 = new BackgroundTask();
+                            backgroundTask1.execute(order_id, "cancelThisOrder.php");
+                        }
+                    });
 
-                    dialog.cancel();
-                    }
-                });
+                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //go to implement to cancel this order
+                            //also inform the admin
 
-                AlertDialog dialog=builder.create();
-                dialog.show();
+                            dialog.cancel();
+                        }
+                    });
 
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
 
+                }
 
 
             }
@@ -241,10 +249,12 @@ public class order_detail_on_click extends AppCompatActivity {
             Log.d("checkCondition", String.valueOf(check));
 
             if(check.equals("3")){
-                
+
+
                 finish();
 
             }
+            else
 
             if(check.equals("1")){
 
@@ -262,13 +272,13 @@ public class order_detail_on_click extends AppCompatActivity {
                     totalPrice=JO.getString("totalPrice");
                     quantity=JO.getString("quantity");
                     foodPrice=JO.getString("foodPrice");
-                    tvFoodStatus_Ordered.setText(status);
+                    tvFoodStatus_Ordered.setText(JO.getString("orderStatus"));
                 Glide.with(getApplicationContext()).load(imageUrl).into(ivFoodImage_Ordered);
                 tvFoodName_Ordered.setText(foodName);
                 tvStdPrice_Ordered.setText(foodPrice);
                 tvQuantity_Ordered.setText(quantity);
                 tvAddress_Ordered.setText(supplyAddress);
-                    tvTotal_Ordered.setText("₹"+totalPrice);
+                tvTotal_Ordered.setText("₹"+totalPrice);
 
 
 
@@ -277,7 +287,7 @@ public class order_detail_on_click extends AppCompatActivity {
 
 
             }
-            else {
+            else  {
                 //show some error message for not fetching the orders
                 Toast.makeText(getApplicationContext(),"Order could not be fetched. Please check your internet connection.",Toast.LENGTH_LONG).show();
             }

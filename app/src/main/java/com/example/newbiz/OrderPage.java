@@ -133,48 +133,52 @@ SessionManager manager;
             @Override
             public void onClick(View view) {
 
-                MyOrders myOrders=new MyOrders();
-             //  MyOrders.BackgroundTask backgroundTask= myOrders.BackgroundTask(OrderPage.this,null);
+             if( etQuantity.getText().toString().trim().length()==0)  {
+                 Toast.makeText(OrderPage.this,"Please input corect number in quantity field",Toast.LENGTH_SHORT).show();
+             } else {
 
-                //trying to insert into the db
-                int foodCardID= Integer.parseInt(myFood.getFoodCard_id().trim());  //idhar kaise find karenge foodcard id   (crying)😭
-                String userID= (prefs.getString("user_id",""));
-                String supplyAddress=etAddress.getText().toString().trim();
-                String foodName=myFood.getFoodName();
-                float totalPrice=Float.parseFloat(myFood.getFoodPrice())*Float.parseFloat(etQuantity.getText().toString());
+                 MyOrders myOrders=new MyOrders();
+                 //  MyOrders.BackgroundTask backgroundTask= myOrders.BackgroundTask(OrderPage.this,null);
+
+                 //trying to insert into the db
+                 int foodCardID= Integer.parseInt(myFood.getFoodCard_id().trim());  //idhar kaise find karenge foodcard id   (crying)😭
+                 String userID= (prefs.getString("user_id",""));
+                 String supplyAddress=etAddress.getText().toString().trim();
+                 String foodName=myFood.getFoodName();
+                 float totalPrice=Float.parseFloat(myFood.getFoodPrice())*Float.parseFloat(etQuantity.getText().toString());
 //                        + Float.parseFloat(tvTaxes.getText().toString());
-                String status="Order Placed";
+                 String status="Order Placed";
 
-                Date c = Calendar.getInstance().getTime();
-             //   String orderTime=c.toString();
-                String[] s=c.toString().split(" ");
-                String orderTime=s[3];
+                 Date c = Calendar.getInstance().getTime();
+                 //   String orderTime=c.toString();
+                 String[] s=c.toString().split(" ");
+                 String orderTime=s[3];
 
-                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-                String orderDate = df.format(c);
+                 SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                 String orderDate = df.format(c);
+                 if(Float.parseFloat(etQuantity.getText().toString().trim())<1 ){
+                     Toast.makeText(OrderPage.this,"Please input corect number in quantity field",Toast.LENGTH_SHORT).show();
+                 }
 
-
-BackgroundTask backgroundTask=new BackgroundTask();
-                String sql="INSERT INTO orders(foodcard_id,user_id,quantity,supplyAddress,totalPrice," +
-                        "orderStatus,orderDate,orderTime)" +
-                        " VALUES("+foodCardID +","+
-                        Integer.parseInt(userID) +", "
-                        +Float.parseFloat(etQuantity.getText().toString())+","
-                        +"'"+ supplyAddress + "'"+","
-                        +totalPrice  +","
-                        + "'"+status+"'"+ ","
-                        +"'"+ orderDate + "'"+ "," +
-                        "'"+ orderTime + "'"+
-                        ")" ;
+                 else {
+                     BackgroundTask backgroundTask=new BackgroundTask();
+                     String sql="INSERT INTO orders(foodcard_id,user_id,quantity,supplyAddress,totalPrice," +
+                             "orderStatus,orderDate,orderTime)" +
+                             " VALUES("+foodCardID +","+
+                             Integer.parseInt(userID) +", "
+                             +Float.parseFloat(etQuantity.getText().toString())+","
+                             +"'"+ supplyAddress + "'"+","
+                             +totalPrice  +","
+                             + "'"+status+"'"+ ","
+                             +"'"+ orderDate + "'"+ "," +
+                             "'"+ orderTime + "'"+
+                             ")" ;
 
 //                String sql="SELECT * FROM orders";
-                backgroundTask.execute(sql,"insert.php");
+                     backgroundTask.execute(sql,"insert.php");
 
-
-
-
-
-//                finish();
+                 }
+             }
 
 
             }

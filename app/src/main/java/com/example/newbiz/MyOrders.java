@@ -17,6 +17,7 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.Gravity;
@@ -53,7 +54,8 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyOrders extends Fragment  {
+public class MyOrders extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+
 
 //protected static String  CONNECTION="https://tonsorial-gear.000webhostapp.com/";
 protected static String  CONNECTION="http://192.168.43.77";
@@ -89,19 +91,9 @@ SharedPreferences prefs;
         backgroundTask=new BackgroundTask();
 
       //  String sql="SELECT * FROM orders ORDER BY id DESC";
-        if(!prefs.getString("email", "").equals(""))
-                 backgroundTask.execute("fillMyOrders.php");
+
 //        else startActivity(new Intent(getContext(),LoginActivity.class));
         return v;
-
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-
-
 
     }
 
@@ -239,8 +231,16 @@ SharedPreferences prefs;
         linearLayout.addView(textView);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        backgroundTask=new BackgroundTask();
+        if(!prefs.getString("email", "").equals(""))
+            backgroundTask.execute("fillMyOrders.php");
 
-    public class BackgroundTask extends AsyncTask<String,Void,String> {
+    }
+
+    public  class BackgroundTask extends AsyncTask<String,Void,String> {
         AlertDialog.Builder builder;
         private static final String KEY_SUCCESS ="success" ;
         private static final String KEY_DATA ="data" ;
@@ -340,6 +340,14 @@ SharedPreferences prefs;
         }
     }
 
+    @Override
+    public void onRefresh() {
+        backgroundTask=new BackgroundTask();
+
+        //  String sql="SELECT * FROM orders ORDER BY id DESC";
+        if(!prefs.getString("email", "").equals(""))
+            backgroundTask.execute("fillMyOrders.php");
+    }
 
 
 
