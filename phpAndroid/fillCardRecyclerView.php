@@ -9,12 +9,11 @@ $response = array();
 $res=array(); 
 
 
-$email=$_POST['email'];
 
-//query to fill recycler view of MyOrder will be fi red from here
-$sql="SELECT imageUrl,foodName,orderDate,order_id,orderStatus 
-             from orders O,foodcard F
-             WHERE O.foodcard_id=F.foodcard_id AND user_id=(SELECT user_id FROM users WHERE email='$email')  ORDER BY order_id DESC";
+//query to fill recycler view of Foodcard will be fired from here
+$sql="SELECT * 
+             from foodcard
+             ORDER BY foodcard_id  DESC";
 
 if($stmt=$conn->prepare($sql)){
 
@@ -26,11 +25,13 @@ if($stmt=$conn->prepare($sql)){
 
    while ($row = $result->fetch_assoc()) {
 
+    $resArray['foodcard_id']=$row['foodcard_id'];
+    $resArray['food_id']=$row['food_id'];
     $resArray['imageUrl']=$row['imageUrl'];
     $resArray['foodName']=$row['foodName'];
-    $resArray['orderDate']=$row['orderDate'];
-    $resArray['order_id']=$row['order_id'];
-    $resArray['orderStatus']=$row['orderStatus'];
+    $resArray['foodPrice']=$row['foodPrice'];
+    $resArray['location']=$row['address'];
+    $resArray['any_other_info']=$row['any_other_info'];
 
      //handle the problem of foreign key to maintain its integrity
      $res[]=$resArray;

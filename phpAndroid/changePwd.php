@@ -1,18 +1,19 @@
 <?php
+
 include('dbConn.php');
+
 
 
 $email=$_POST['email'];
 $pwd=$_POST['pwd'];
-    
+$newPwd=$_POST['newPwd'];
+// $email="a@a.a";
+// $pwd="123";
+// $newPwd="1";
 
-$response=array();
-$resArray=array();
+$hashedPwd=password_hash($newPwd,PASSWORD_DEFAULT);
 
-
-
-
-$sql="SELECT * FROM users WHERE email='$email'";
+$sql="SELECT pwd FROM users WHERE email='$email'";
 
 if($stmt=$conn->prepare($sql)){
     $stmt->execute();
@@ -27,21 +28,27 @@ if($stmt=$conn->prepare($sql)){
 
         if (password_verify($pwd, $pwdFromDB)) {
             // Success!
-            $resArray['name']=$row['name'];
-            $resArray['email']=$email;
-            $resArray['pwd']=$pwd;
-            $resArray['address']=$row['address'];
-            $resArray['contact']=$row['phone_no'];  
+           
 
-            $res[]=$resArray;
+        //worst way to update data into table
+        //improvise it
+        $sql="UPDATE users 
+            SET pwd='$hashedPwd'
+            WHERE email='$email' "; //no two user will have same email id since we had set it as UNIQUE
 
+        if($stmt=$conn->prepare($sql)){
+            
+            $stmt->execute();
+            $result=$stmt->get_result();
+
+            $response["success"]=1;
+        }    
             
         $stmt->free_result();
         $stmt->close();
 
         $response["success"]=1;
-        $response['user_id']=$row['user_id'];
-        $response["data"]=$res;
+        $response["data"]="";
             
         }
 
@@ -49,7 +56,7 @@ if($stmt=$conn->prepare($sql)){
         else {
             // Invalid credentials
             $response["success"]=0;
-             $response["data"]=mysqli_error($conn);
+             $response["data"]="";
         }
     }
     else {
@@ -64,3 +71,4 @@ else{
 }
 
 echo json_encode($response);
+

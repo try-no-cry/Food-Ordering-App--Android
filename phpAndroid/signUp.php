@@ -31,6 +31,7 @@ if($stmt=$conn->prepare($sqlCheckDupMail)){
     if($result->num_rows){
         $response["success"]=0;
         $response["data"]="";
+       
         echo json_encode($response);
         return;
         
@@ -58,7 +59,18 @@ if($stmt=$conn->prepare($sql)){
     $stmt->execute();
     $result=$stmt->get_result();
 
+
+
+    $sql="SELECT user_id FROM users WHERE email='$email'";
+    if($stmt=$conn->prepare($sql)){
+        $stmt->execute();
+        $result=$stmt->get_result();
+        $row = $result->fetch_assoc();
+       
     $response["success"]=1;
+    $response["user_id"]=$row['user_id'];
+
+    }
 }                  
 
 echo json_encode($response);
