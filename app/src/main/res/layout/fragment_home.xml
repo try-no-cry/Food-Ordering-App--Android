@@ -21,47 +21,21 @@
             android:orientation="vertical"
             android:weightSum="1">
 
-            <!--<ViewFlipper-->
-            <!--android:id="@+id/viewFlipper"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content">-->
 
-            <!--<ImageView-->
-            <!--android:id="@+id/ivImages"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent" />-->
-
-            <!--</ViewFlipper>-->
-
-            <!--<androidx.viewpager.widget.ViewPager-->
-                <!--android:id="@+id/viewPager"-->
-
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="0sp"-->
-
-                <!--android:layout_marginTop="0dp"-->
-
-                <!--android:layout_weight="0.2"-->
-                <!--android:background="#FBC02D"-->
-                <!--android:paddingLeft="20sp"-->
-                <!--android:paddingTop="30sp"-->
-                <!--android:paddingRight="20sp"-->
-                <!--android:paddingBottom="30sp">-->
-
-
-            <!--</androidx.viewpager.widget.ViewPager>-->
-
-
-            <!-- TODO: Update blank fragment layout -->
-
-            z<androidx.recyclerview.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/slideRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="0sp"
                 android:layout_marginBottom="20sp"
                 android:layout_weight="1"
                 android:background="#FBC02D"
-                android:scaleType="fitCenter" />
+                android:isScrollContainer="true"
+                android:scaleType="fitCenter"
+                android:scrollbarAlwaysDrawHorizontalTrack="true"
+                android:scrollbarDefaultDelayBeforeFade="10000"
+                android:scrollbarFadeDuration="0"
+                android:scrollbarThumbHorizontal="@drawable/scroll_thumb"
+                android:scrollbars="horizontal" />
 
 
             <androidx.recyclerview.widget.RecyclerView

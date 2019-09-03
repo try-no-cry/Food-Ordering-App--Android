@@ -1,6 +1,9 @@
 package com.example.newbiz;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +50,7 @@ private Context context;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyOrdersPageRecyclerAdapter.ViewHolder h, int position) {
+    public void onBindViewHolder(@NonNull final MyOrdersPageRecyclerAdapter.ViewHolder h, final int position) {
 
         String imageUrl=list.get(position).getImageUrl();
         String orderName=list.get(position).getFoodName();
@@ -64,9 +67,38 @@ private Context context;
         h.tvOrderDate_MO.setText(orderDate);
         h.tvOrderStatus_MO.setText(status);
 
+
+
         //on click there will be a dialog box to show every detail of the order
+        h.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showOrderDetailDialog(h.itemView,position);
+            }
+        });
 
 
+
+    }
+
+    private void showOrderDetailDialog(View itemView, int position) {
+        //passing order id so that it gets all info from there
+        String imageUrl=list.get(position).getImageUrl();
+        String orderName=list.get(position).getFoodName();
+        String order_id=list.get(position).getOrder_id();
+        String orderDate=list.get(position).getOrderDate();
+        String status=list.get(position).getOrderStatus();
+
+
+        Intent intent=new Intent(context,order_detail_on_click.class);
+        intent.putExtra("order_id",order_id);
+        intent.putExtra("imageUrl",imageUrl);
+
+        intent.putExtra("foodName",orderName);
+        intent.putExtra("orderDate",orderDate);
+        intent.putExtra("status",status);
+        //we can get address,foodPrice there from query which will fetch it
+        context.startActivity(intent);
 
     }
 

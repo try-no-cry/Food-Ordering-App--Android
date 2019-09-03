@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Handler;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -104,34 +105,11 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
         slideRecycler=view.findViewById(R.id.slideRecycler);
         //slide start
 
+        BackgroundTaskSlider backgroundTaskSlider=new BackgroundTaskSlider();
+        backgroundTaskSlider.execute("fetchIntroSlider.php");
 
-        slide_list.add(new Slide_recycler("https://images.unsplash.com/photo-1528920304568-7aa06b3dda8b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"));
-        slide_list.add(new Slide_recycler("https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"));
-        slide_list.add(new Slide_recycler("https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Stourhead_Pantheon.jpg/1200px-Stourhead_Pantheon.jpg"));
-        slide_list.add(new Slide_recycler("https://images.unsplash.com/photo-1528920304568-7aa06b3dda8b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"));
-        slide_list.add(new Slide_recycler("https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"));
-        slide_list.add(new Slide_recycler("https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Stourhead_Pantheon.jpg/1200px-Stourhead_Pantheon.jpg"));
-        slide_list.add(new Slide_recycler("https://images.unsplash.com/photo-1528920304568-7aa06b3dda8b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"));
-        slide_list.add(new Slide_recycler("https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"));
-        slide_list.add(new Slide_recycler("https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Stourhead_Pantheon.jpg/1200px-Stourhead_Pantheon.jpg"));
-        slide_list.add(new Slide_recycler("https://images.unsplash.com/photo-1528920304568-7aa06b3dda8b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"));
-        slide_list.add(new Slide_recycler("https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"));
-        slide_list.add(new Slide_recycler("https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Stourhead_Pantheon.jpg/1200px-Stourhead_Pantheon.jpg"));
 
-        final SlideAdapter slideAdapter=new SlideAdapter(slide_list,getContext());
-//        layoutManagerSlide=new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false);
-//        slideRecycler.setLayoutManager(layoutManagerSlide);
-//        GridLayoutManager gridLayoutManager=new GridLayoutManager(getContext(),1,RecyclerView.HORIZONTAL, false);
-//        slideRecycler.setLayoutManager(gridLayoutManager);
-        layoutManager=new CenterZoomLayoutManager(getContext(),RecyclerView.HORIZONTAL,false);
-        slideRecycler.setLayoutManager(layoutManager);
-
-        final SnapHelper snapHelper = new LinearSnapHelper();
-        slideRecycler.setHasFixedSize(true);
-        snapHelper.attachToRecyclerView(slideRecycler);
-        slideRecycler.setAdapter(slideAdapter);
-
-       BackgroundTask backgroundTask=new BackgroundTask();
+       BackgroundTaskCard backgroundTask=new BackgroundTaskCard();
        backgroundTask.execute("fillCardRecyclerView.php");
 
 
@@ -141,7 +119,7 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
 
 
 
-    public class BackgroundTask extends AsyncTask<String,Void,String> {
+    public class BackgroundTaskCard extends AsyncTask<String,Void,String> {
         AlertDialog.Builder builder;
         private static final String KEY_SUCCESS ="success" ;
         private static final String KEY_DATA ="data" ;
@@ -208,7 +186,137 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
         }
     }
 
+    public class BackgroundTaskSlider extends AsyncTask<String,Void,String> {
+        AlertDialog.Builder builder;
+        private static final String KEY_SUCCESS ="success" ;
+        private static final String KEY_DATA ="data" ;
+        String result="  ";
+        String connstr= MyOrders.CONNECTION +"/phpAndroid/";
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            //Add progress dialog to show insertion
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            super.onPostExecute(s);
+            setImageSlider(s);
+        }
+
+        @Override
+        protected String doInBackground(String... voids) {
+
+            String extension=voids[0];
+
+
+            try {
+                URL url=new URL(connstr+extension);
+                HttpURLConnection http= (HttpURLConnection) url.openConnection();
+                http.setRequestMethod("POST");
+                http.setDoInput(true);
+                http.setDoOutput(true);
+
+
+
+
+                InputStream ips=http.getInputStream();
+
+                BufferedReader reader=new BufferedReader(new InputStreamReader(ips,"ISO-8859-1"));
+
+                String line="";
+
+                while((line=reader.readLine())!=null){
+
+                    result +=line;
+
+                }
+
+                reader.close();
+                ips.close();
+                http.disconnect();
+
+                return result;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                Log.i("Message1",e.getMessage());
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.i("Message2",e.getMessage());
+            }
+
+
+            return result;
+        }
+    }
+
+    private void setImageSlider(String s) {
+
+
+//        layoutManagerSlide=new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false);
+//        slideRecycler.setLayoutManager(layoutManagerSlide);
+//        GridLayoutManager gridLayoutManager=new GridLayoutManager(getContext(),1,RecyclerView.HORIZONTAL, false);
+//        slideRecycler.setLayoutManager(gridLayoutManager);
+
+
+
+        try {
+            JSONObject jsonObject = new JSONObject(s);
+            String check=jsonObject.getString("success");
+            Log.d("checkCondition", String.valueOf(check));
+            Slide_recycler slide_recycler;
+            if(check.equals("1")){
+
+                JSONArray jsonArray=jsonObject.getJSONArray("data");
+                int count=0;
+
+
+                while(count<jsonArray.length()){
+
+                    JSONObject JO=jsonArray.getJSONObject(count);
+                    String introSlider_id= String.valueOf(JO.getInt("introSlider_id"));
+                    String food_id= String.valueOf(JO.getInt("food_id"));
+                    String iS_ImageUrl=JO.getString("iS_ImageUrl");
+
+                    slide_recycler=new Slide_recycler();
+                    slide_recycler.setSlideImageID(introSlider_id);
+                    slide_recycler.setSlideImageUrl(iS_ImageUrl);
+                    slide_recycler.setFoodID(food_id);
+
+                    slide_list.add(slide_recycler);
+
+                    count++;
+
+
+                }
+
+
+                SlideAdapter slideAdapter=new SlideAdapter(slide_list,getContext());
+
+                layoutManager=new CenterZoomLayoutManager(getContext(),RecyclerView.HORIZONTAL,false);
+                slideRecycler.setLayoutManager(layoutManager);
+
+                final SnapHelper snapHelper = new LinearSnapHelper();
+                slideRecycler.setHasFixedSize(true);
+                snapHelper.attachToRecyclerView(slideRecycler);
+                slideRecycler.setAdapter(slideAdapter);
+
+
+
+            }
+            else{
+                Toast.makeText(getContext(),"This Email-ID is already registered.",Toast.LENGTH_SHORT).show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+        }
+
+
+    }
 
 
     public void setFoodCardRecycler(String result){

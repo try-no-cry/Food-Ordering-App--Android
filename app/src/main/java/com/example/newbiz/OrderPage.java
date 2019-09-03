@@ -171,11 +171,7 @@ BackgroundTask backgroundTask=new BackgroundTask();
                 backgroundTask.execute(sql,"insert.php");
 
 
-                Toast.makeText(getApplicationContext(),"Order Placed",Toast.LENGTH_SHORT).show();
-                //order will now move to my order fragment
-                //write a query to move into my orders fragments table whic will eventually come into
-                //fragment as card view with status of delivered/undelivered
-                Toast.makeText(getApplicationContext(),"Go To 'My Orders' ",Toast.LENGTH_LONG).show();
+
 
 
 //                finish();
@@ -189,6 +185,9 @@ BackgroundTask backgroundTask=new BackgroundTask();
     }
 
     public void finishThisAct(){
+
+        Toast.makeText(getApplicationContext(),"Order Placed",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(),"Go To 'My Orders' ",Toast.LENGTH_LONG).show();
         finish();
     }
 

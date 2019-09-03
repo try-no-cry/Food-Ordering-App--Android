@@ -161,70 +161,70 @@ SharedPreferences prefs;
     public  void setRecyclerView(String data){
 
 
-        MyOrders_SingleOrder order;
-        JSONArray jsonArray;
-//        RecyclerView
+            MyOrders_SingleOrder order;
+            JSONArray jsonArray;
+    //        RecyclerView
 
 
-        //extract data from the JSON string
+            //extract data from the JSON string
 
-        try {
-            JSONObject jsonObject=new JSONObject(data);
-           // JSONArray jsonArray=jsonObject.getJSONArray("success");
-            String check=jsonObject.getString("success");
-            Log.d("checkCondition", String.valueOf(check));
+            try {
+                JSONObject jsonObject=new JSONObject(data);
+               // JSONArray jsonArray=jsonObject.getJSONArray("success");
+                String check=jsonObject.getString("success");
+                Log.d("checkCondition", String.valueOf(check));
 
-            if(check.equals("1")){
+                if(check.equals("1")){
 
-             //JSONArray jsonArray=jsonObject.getJSONArray("data");
-                jsonArray=jsonObject.getJSONArray("data");
-                int count=0;
-                if(jsonArray.length()==0)
-                {
-                    setEmptyMsg("No orders given till now.");
+                 //JSONArray jsonArray=jsonObject.getJSONArray("data");
+                    jsonArray=jsonObject.getJSONArray("data");
+                    int count=0;
+                    if(jsonArray.length()==0)
+                    {
+                        setEmptyMsg("No orders given till now.");
+                    }
+
+                    String imageUrl,foodName,orderDate,orderStatus,order_id;
+                    while(count<jsonArray.length()){
+
+                        JSONObject JO=jsonArray.getJSONObject(count);
+                        imageUrl=JO.getString("imageUrl");
+                        foodName=JO.getString("foodName");
+                        orderDate=JO.getString("orderDate");
+                        orderStatus=JO.getString("orderStatus");
+                        order_id=JO.getString("order_id");
+
+                        order=new MyOrders_SingleOrder();
+                        order.setImageUrl(imageUrl);
+                        order.setFoodName(foodName);
+                        order.setOrderDate(orderDate);
+                        order.setOrder_id(order_id);
+                        order.setOrderStatus(orderStatus);
+
+                        list.add(order);
+                        count++;
+
+                    }
+
+                    MyOrdersPageRecyclerAdapter adapter=new MyOrdersPageRecyclerAdapter(list,getContext());
+                    myOrdersRecycler.setHasFixedSize(true);
+                    layoutManager=new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
+                    myOrdersRecycler.setLayoutManager(layoutManager);
+                    myOrdersRecycler.setAdapter(adapter);
+
+                }
+                else {
+                    //show some error message for not fetching the orders
+                    Toast.makeText(getContext(),"Orders could not be fetched. Please check your internet connection.",Toast.LENGTH_LONG).show();
                 }
 
-                String imageUrl,foodName,orderDate,orderStatus,order_id;
-                while(count<jsonArray.length()){
 
-                    JSONObject JO=jsonArray.getJSONObject(count);
-                    imageUrl=JO.getString("imageUrl");
-                    foodName=JO.getString("foodName");
-                    orderDate=JO.getString("orderDate");
-                    orderStatus=JO.getString("orderStatus");
-                    order_id=JO.getString("order_id");
 
-                    order=new MyOrders_SingleOrder();
-                    order.setImageUrl(imageUrl);
-                    order.setFoodName(foodName);
-                    order.setOrderDate(orderDate);
-                    order.setOrder_id(order_id);
-                    order.setOrderStatus(orderStatus);
-
-                    list.add(order);
-                    count++;
-
-                }
-
-                MyOrdersPageRecyclerAdapter adapter=new MyOrdersPageRecyclerAdapter(list,getContext());
-                myOrdersRecycler.setHasFixedSize(true);
-                layoutManager=new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
-                myOrdersRecycler.setLayoutManager(layoutManager);
-                myOrdersRecycler.setAdapter(adapter);
-
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(),"Couldn't connect. Try Again",Toast.LENGTH_LONG).show();
             }
-            else {
-                //show some error message for not fetching the orders
-                Toast.makeText(getContext(),"Orders could not be fetched. Please check your internet connection.",Toast.LENGTH_LONG).show();
-            }
-
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Toast.makeText(getContext(),"Couldn't connect. Try Again",Toast.LENGTH_LONG).show();
-        }
-        //tvMyOrders.setText(data);
+            //tvMyOrders.setText(data);
 
     }
 
@@ -319,6 +319,24 @@ SharedPreferences prefs;
 
 
             return result;
+        }
+    }
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+
+        super.setUserVisibleHint(isVisibleToUser);
+
+        // Refresh tab data:
+
+        if (getFragmentManager() != null) {
+
+            getFragmentManager()
+                    .beginTransaction()
+                    .detach(this)
+                    .attach(this)
+                    .commit();
         }
     }
 

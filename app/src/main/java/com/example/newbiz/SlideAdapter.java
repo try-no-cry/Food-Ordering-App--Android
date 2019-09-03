@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,14 +43,29 @@ Context context;
 
     @Override
     public void onBindViewHolder(@NonNull SlideAdapter.ViewHolder holder, int position) {
-        String imageUrl=list.get(position).getSlideImageUrl();
 
-        Glide.with(context).load(imageUrl).into(holder.ivSlideRec);
+        position=position%list.size();
+        //some extra info has been given for future use,if any,maybe to
+        final String slideImageID=list.get(position).getSlideImageID();
+        String imageUrl=list.get(position).getSlideImageUrl();
+        String food_id=list.get(position).getFoodID();
+
+        Glide.with(context).load(imageUrl).centerCrop().into(holder.ivSlideRec);
+
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context,slideImageID,Toast.LENGTH_SHORT).show();
+                //we have food id here and thus we can get any info about any food
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return list.size();
+//        return Integer.MAX_VALUE;
     }
 
 
