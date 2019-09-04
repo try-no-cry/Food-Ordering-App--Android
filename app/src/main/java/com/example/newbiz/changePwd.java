@@ -33,7 +33,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class changePwd extends AppCompatActivity {
+public class changePwd extends BaseActivity {
 private TextView tvOldPwd,tvNewPwd,tvNewPwdConf;
 private EditText etOldPwd,etNewPwd,etNewPwdConf;
 private Button btnChangePassword;
@@ -91,7 +91,8 @@ private Button btnChangePassword;
         private static final String KEY_SUCCESS ="success" ;
         private static final String KEY_DATA ="data" ;
         String result="  ";
-        String connstr= MyOrders.CONNECTION +"/phpAndroid/";
+        String connstr= MyOrders.CONNECTION;
+//        +"/phpAndroid/";
 
         @Override
         protected void onPreExecute() {

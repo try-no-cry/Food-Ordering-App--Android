@@ -39,7 +39,7 @@ import static com.example.newbiz.MyOrders.CONNECTION;
 import static com.example.newbiz.MyOrders.resultFromQuery;
 import static com.example.newbiz.SignUp.MY_PREFS_NAME;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
     private TextView tvLogin_title,tvForgetPwd,tvUName,tvPwd;
     private EditText etUName,etPwd;
     private Button btnLogin,btnGoToSignUp;
@@ -105,7 +105,8 @@ public class LoginActivity extends AppCompatActivity {
         private static final String KEY_SUCCESS ="success" ;
         private static final String KEY_DATA ="data" ;
         String result="  ";
-        String connstr= MyOrders.CONNECTION +"/phpAndroid/";
+        String connstr= MyOrders.CONNECTION ;
+//        +"/phpAndroid/";
 
         @Override
         protected void onPreExecute() {

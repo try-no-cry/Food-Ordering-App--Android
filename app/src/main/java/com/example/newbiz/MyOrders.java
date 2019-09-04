@@ -1,12 +1,13 @@
 package com.example.newbiz;
 
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,12 +21,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,8 +43,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -57,8 +53,8 @@ import static android.content.Context.MODE_PRIVATE;
 public class MyOrders extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
 
-//protected static String  CONNECTION="https://tonsorial-gear.000webhostapp.com/";
-protected static String  CONNECTION="http://192.168.43.77";
+protected static String  CONNECTION="https://newbizsite.000webhostapp.com/";
+//protected static String  CONNECTION="http://192.168.43.77";
 //private TextView tvMyOrders;
 private  BackgroundTask backgroundTask;
 static  String resultFromQuery;
@@ -67,6 +63,7 @@ private RecyclerView.Adapter adapter;
 private RecyclerView.LayoutManager layoutManager;
 private ArrayList<MyOrders_SingleOrder> list=new ArrayList<>();
 SharedPreferences prefs;
+private TextView tvOfflineMessage;
 private SwipeRefreshLayout refreshLayout;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,6 +72,7 @@ private SwipeRefreshLayout refreshLayout;
         View v=inflater.inflate(R.layout.fragment_my_orders, container, false);
       // tvMyOrders=v.findViewById(R.id.tvMyOrders);
         myOrdersRecycler=v.findViewById(R.id.myOrdersFragRecycler);
+        tvOfflineMessage=v.findViewById(R.id.tvOfflineMessage);
         prefs = getContext().getSharedPreferences("UserInfo", MODE_PRIVATE);
         refreshLayout=v.findViewById(R.id.swipeRefresh);
         refreshLayout.setColorSchemeColors(Color.BLUE, Color.GREEN, Color.YELLOW);
@@ -93,7 +91,7 @@ private SwipeRefreshLayout refreshLayout;
     public void onStart() {
         super.onStart();
         if(prefs.getString("email", "").equals(""))
-            setEmptyMsg("Please Login to see your orders.");
+            setEmptyMsg();
 
     }
 
@@ -155,7 +153,7 @@ private SwipeRefreshLayout refreshLayout;
                     int count=0;
                     if(jsonArray.length()==0)
                     {
-                        setEmptyMsg("No orders given till now.");
+                        setEmptyMsg();
                     }
 
                     String imageUrl,foodName,orderDate,orderStatus,order_id;
@@ -204,40 +202,81 @@ private SwipeRefreshLayout refreshLayout;
 
     }
 
-    private void setEmptyMsg(String msg) {
+    private void setEmptyMsg() {
+
+ tvOfflineMessage.setVisibility(View.VISIBLE);
+//        LinearLayout linearLayout=getView().findViewById(R.id.myOrdersLayout);
+//        TextView textView=new TextView(getContext());
+//        textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+//
+//        textView.setText(msg);
+//        textView.setTextSize(30);
+//        textView.setTextColor(Color.BLUE);
+//        textView.setGravity(Gravity.CENTER);
+//
+//        linearLayout.addView(textView);
+    }
 
 
-        LinearLayout linearLayout=getView().findViewById(R.id.myOrdersLayout);
-        TextView textView=new TextView(getContext());
-        textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+    public void  checkNetworkConnection(){
 
-        textView.setText(msg);
-        textView.setTextSize(30);
-        textView.setTextColor(Color.BLUE);
-        textView.setGravity(Gravity.CENTER);
+        if (isOnline()) {
+            //do whatever you want to do
 
-        linearLayout.addView(textView);
+        } else {
+            try {
+                final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
+                builder.setTitle("Network Error");
+                builder.setMessage("Please check your network conection");
+                builder.setCancelable(false);
+
+
+                builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        checkNetworkConnection();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+
+
+            } catch (Exception e) {
+                Log.d("Dialog", "Show Dialog: " + e.getMessage());
+            }
+        }
+
+
+    }
+
+
+    public boolean isOnline() {
+        ConnectivityManager conMgr = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+
+        if(netInfo == null || !netInfo.isConnected() || !netInfo.isAvailable()){
+            Toast.makeText(getContext(), "No Internet connection!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        checkNetworkConnection();
         backgroundTask=new BackgroundTask();
-        if(!prefs.getString("email", "").equals(""))
+
+        if(!prefs.getString("email", "").equals("")){
             backgroundTask.execute("fillMyOrders.php");
-        else {
-            LinearLayout linearLayout=getView().findViewById(R.id.myOrdersLayout);
-            TextView textView=new TextView(getContext());
-            textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            tvOfflineMessage.setVisibility(View.GONE);
 
-            textView.setText("Please Login To See Your Orders.");
-            textView.setTextSize(30);
-            textView.setTextColor(Color.BLUE);
-            textView.setGravity(Gravity.CENTER);
-
-            linearLayout.addView(textView);
         }
-//        setEmptyMsg("Please Login To See Your Orders.");
+        else {
+           setEmptyMsg();
+
+        }
 
     }
 
@@ -246,7 +285,8 @@ private SwipeRefreshLayout refreshLayout;
         private static final String KEY_SUCCESS ="success" ;
         private static final String KEY_DATA ="data" ;
         String result="  ";
-        String connstr= CONNECTION +"/phpAndroid/";
+//        String connstr= CONNECTION +"/phpAndroid/";
+        String connstr=CONNECTION;
 
         @Override
         protected void onPreExecute() {
@@ -258,7 +298,7 @@ private SwipeRefreshLayout refreshLayout;
             super.onPostExecute(s);
             if(!s.equals(""))
                  setRecyclerView(result);
-            else setEmptyMsg("No order has been given till now");
+//            else setEmptyMsg();
             onRefreshComplete();
 
         }
@@ -344,11 +384,17 @@ private SwipeRefreshLayout refreshLayout;
 
     @Override
     public void onRefresh() {
-        backgroundTask=new BackgroundTask();
 
-        //  String sql="SELECT * FROM orders ORDER BY id DESC";
-        if(!prefs.getString("email", "").equals(""))
-            backgroundTask.execute("fillMyOrders.php");
+        if(prefs.getString("email","")!=""){
+
+            backgroundTask=new BackgroundTask();
+
+            //  String sql="SELECT * FROM orders ORDER BY id DESC";
+            if(!prefs.getString("email", "").equals(""))
+                backgroundTask.execute("fillMyOrders.php");
+             }
+        else onRefreshComplete();
+
     }
 
     private void onRefreshComplete() {

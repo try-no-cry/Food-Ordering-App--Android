@@ -28,7 +28,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends BaseActivity{
 
 
 private BottomNavigationView menu_b;
@@ -203,7 +203,7 @@ prefs=getSharedPreferences("UserInfo",MODE_PRIVATE);
             case R.id.logout:{
 
                 final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Confirm Cancellation");
+                builder.setTitle("Confirm ");
                 builder.setMessage("Are you sure to log out?");
                 builder.setCancelable(true);
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {

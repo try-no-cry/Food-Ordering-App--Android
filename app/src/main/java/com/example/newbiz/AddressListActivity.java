@@ -27,7 +27,7 @@ import com.google.android.gms.location.LocationServices;
 
 
 
-public class AddressListActivity extends AppCompatActivity {
+public class AddressListActivity extends BaseActivity {
 
     private FusedLocationProviderClient fusedLocationClient;
 

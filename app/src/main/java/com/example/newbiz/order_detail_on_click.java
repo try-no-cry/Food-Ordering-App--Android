@@ -40,7 +40,7 @@ import java.net.URLEncoder;
 
 import javax.net.ssl.SNIHostName;
 
-public class order_detail_on_click extends AppCompatActivity {
+public class order_detail_on_click extends BaseActivity {
     private TextView tvStatusLabel_Ordered,tvFoodStatus_Ordered;
     private ImageView ivFoodImage_Ordered;
     private TextView tvFoodNameLabel_Ordered,tvFoodName_Ordered,
@@ -149,7 +149,8 @@ public class order_detail_on_click extends AppCompatActivity {
         private static final String KEY_SUCCESS ="success" ;
         private static final String KEY_DATA ="data";
         String result="  ";
-        String connstr= MyOrders.CONNECTION +"/phpAndroid/";
+        String connstr= MyOrders.CONNECTION;
+//        +"/phpAndroid/";
 
         @Override
         protected void onPreExecute() {

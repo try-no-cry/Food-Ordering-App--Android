@@ -38,7 +38,7 @@ import java.util.List;
 
 import static com.example.newbiz.MyOrders.CONNECTION;
 
-public class SignUp extends AppCompatActivity {
+public class SignUp extends BaseActivity {
     private TextView signUp_title,tvEmail_SignUp,tvPwd_SignUp,tvName_SignUp,tvContact,tvAddress_SignUp;
     private EditText etEmail_SignUp,etPwd_SignUp,etName_SignUp,etContact,etAddress_SignUp;
     private Button btn_SignUp;
@@ -104,7 +104,8 @@ private String name,email,address,contact,pwd;
         private static final String KEY_SUCCESS ="success" ;
         private static final String KEY_DATA ="data" ;
         String result="  ";
-        String connstr= MyOrders.CONNECTION +"/phpAndroid/";
+        String connstr= MyOrders.CONNECTION;
+//        +"/phpAndroid/";
 
         @Override
         protected void onPreExecute() {

@@ -3,7 +3,10 @@ package com.example.newbiz;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -98,6 +101,57 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
 
     }
 
+    public void  checkNetworkConnection(){
+
+        if (isOnline()) {
+            //do whatever you want to do
+
+        } else {
+            try {
+                final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
+                builder.setTitle("Network Error");
+                builder.setMessage("Please check your network conection");
+                builder.setCancelable(false);
+
+
+                builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        checkNetworkConnection();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+
+
+            } catch (Exception e) {
+                Log.d("Dialog", "Show Dialog: " + e.getMessage());
+            }
+        }
+
+
+    }
+
+
+    public boolean isOnline() {
+        ConnectivityManager conMgr = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = conMgr.getActiveNetworkInfo();
+
+        if(netInfo == null || !netInfo.isConnected() || !netInfo.isAvailable()){
+//            Toast.makeText(getContext(), "No Internet connection!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        checkNetworkConnection();
+
+    }
+
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -124,7 +178,8 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
         private static final String KEY_SUCCESS ="success" ;
         private static final String KEY_DATA ="data" ;
         String result="  ";
-        String connstr= MyOrders.CONNECTION +"/phpAndroid/";
+        String connstr= MyOrders.CONNECTION ;
+//                +"/phpAndroid/";
 
         @Override
         protected void onPreExecute() {
@@ -191,7 +246,8 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
         private static final String KEY_SUCCESS ="success" ;
         private static final String KEY_DATA ="data" ;
         String result="  ";
-        String connstr= MyOrders.CONNECTION +"/phpAndroid/";
+        String connstr= MyOrders.CONNECTION ;
+//        +"/phpAndroid/";
 
         @Override
         protected void onPreExecute() {

@@ -45,7 +45,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class OrderPage extends AppCompatActivity {
+public class OrderPage extends BaseActivity {
 private TextView tvFoodBillLabel;
 private ImageView ivFoodImage;
 private TextView tvFoodNameLabel,tvFoodName,
@@ -243,7 +243,8 @@ SessionManager manager;
         private static final String KEY_SUCCESS ="success" ;
         private static final String KEY_DATA ="data" ;
         String result="  ";
-        String connstr= MyOrders.CONNECTION +"/phpAndroid/";
+        String connstr= MyOrders.CONNECTION ;
+//        +"/phpAndroid/";
 
         @Override
         protected void onPreExecute() {

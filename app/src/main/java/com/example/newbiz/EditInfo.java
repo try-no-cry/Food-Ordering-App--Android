@@ -39,7 +39,7 @@ import java.net.URLEncoder;
 
 import static com.example.newbiz.MainActivity.FRAGMENT_MYACCOUNT;
 
-public class EditInfo extends AppCompatActivity {
+public class EditInfo extends BaseActivity {
     private TextView editPage_title,tvEditEmail,tvEditName,tvEditContact,tvEditAddress;
     private EditText etEditEmail,etEditName,etEditContact,etEditAddress;
     private Button btn_updateDetails;
@@ -114,7 +114,8 @@ public class EditInfo extends AppCompatActivity {
         private static final String KEY_SUCCESS ="success" ;
         private static final String KEY_DATA ="data" ;
         String result="  ";
-        String connstr= MyOrders.CONNECTION +"/phpAndroid/";
+        String connstr= MyOrders.CONNECTION ;
+//        +"/phpAndroid/";
 
         @Override
         protected void onPreExecute() {
