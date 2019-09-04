@@ -202,7 +202,7 @@
                         android:layout_marginRight="10sp"
                         android:layout_marginBottom="10sp"
                         android:layout_weight="2"
-                        android:inputType="textPostalAddress"
+                        android:inputType="textMultiLine|textPostalAddress"
                         android:padding="5sp"
                         android:text=""
                         android:textColor="#000"

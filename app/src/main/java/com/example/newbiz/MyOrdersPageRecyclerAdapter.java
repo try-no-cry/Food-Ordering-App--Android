@@ -3,6 +3,7 @@ package com.example.newbiz;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,6 +67,9 @@ private Context context;
         h.tvOrderRefNo_MO.setText(orderRefNo);
         h.tvOrderDate_MO.setText(orderDate);
         h.tvOrderStatus_MO.setText(status);
+        if(status.equals("Cancelled"))
+            h.tvOrderStatus_MO.setTextColor(Color.RED);
+        else h.tvOrderStatus_MO.setTextColor(Color.GREEN);
 
 
 

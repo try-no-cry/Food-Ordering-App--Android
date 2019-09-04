@@ -2,12 +2,13 @@ package com.example.newbiz;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationMenu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.FileDescriptor;
@@ -137,6 +139,10 @@ SharedPreferences prefs;
 
             setFragment(FRAGMENT_HOME);
 
+            menu_b.setSelectedItemId(R.id.home);  //selects the home navigation
+
+
+
         }
         else{
 
@@ -194,7 +200,34 @@ prefs=getSharedPreferences("UserInfo",MODE_PRIVATE);
 
         switch (item.getItemId()){
             case R.id.login: startActivity(new Intent(this,LoginActivity.class)); break;
-            case R.id.logout: manager.logout(MainActivity.this); recreate();break;
+            case R.id.logout:{
+
+                final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Confirm Cancellation");
+                builder.setMessage("Are you sure to log out?");
+                builder.setCancelable(true);
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //go to implement to cancel this order
+                        //also inform the admin
+                        manager.logout(MainActivity.this);  menu_b.setSelectedItemId(R.id.home); recreate();
+
+                    }
+                });
+
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //go to implement to cancel this order
+                        //also inform the admin
+
+                        dialog.cancel();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                break;
+            }
 
         }
         return super.onOptionsItemSelected(item);

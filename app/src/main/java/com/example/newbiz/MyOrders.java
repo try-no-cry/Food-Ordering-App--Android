@@ -67,11 +67,7 @@ private RecyclerView.Adapter adapter;
 private RecyclerView.LayoutManager layoutManager;
 private ArrayList<MyOrders_SingleOrder> list=new ArrayList<>();
 SharedPreferences prefs;
-//    public MyOrders() {
-//        // Required empty public constructor
-//    }
-
-
+private SwipeRefreshLayout refreshLayout;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -80,18 +76,14 @@ SharedPreferences prefs;
       // tvMyOrders=v.findViewById(R.id.tvMyOrders);
         myOrdersRecycler=v.findViewById(R.id.myOrdersFragRecycler);
         prefs = getContext().getSharedPreferences("UserInfo", MODE_PRIVATE);
-
-
-
-
-
-
-
+        refreshLayout=v.findViewById(R.id.swipeRefresh);
+        refreshLayout.setColorSchemeColors(Color.BLUE, Color.GREEN, Color.YELLOW);
+        refreshLayout.setOnRefreshListener(this);
 
         backgroundTask=new BackgroundTask();
 
       //  String sql="SELECT * FROM orders ORDER BY id DESC";
-
+//went in Resume
 //        else startActivity(new Intent(getContext(),LoginActivity.class));
         return v;
 
@@ -146,23 +138,13 @@ SharedPreferences prefs;
 
 
 
-
-
-
-
     public  void setRecyclerView(String data){
 
 
             MyOrders_SingleOrder order;
             JSONArray jsonArray;
-    //        RecyclerView
-
-
-            //extract data from the JSON string
-
             try {
                 JSONObject jsonObject=new JSONObject(data);
-               // JSONArray jsonArray=jsonObject.getJSONArray("success");
                 String check=jsonObject.getString("success");
                 Log.d("checkCondition", String.valueOf(check));
 
@@ -177,6 +159,8 @@ SharedPreferences prefs;
                     }
 
                     String imageUrl,foodName,orderDate,orderStatus,order_id;
+                    if(list.size()!=0)
+                        list.clear();
                     while(count<jsonArray.length()){
 
                         JSONObject JO=jsonArray.getJSONObject(count);
@@ -221,11 +205,15 @@ SharedPreferences prefs;
     }
 
     private void setEmptyMsg(String msg) {
+
+
         LinearLayout linearLayout=getView().findViewById(R.id.myOrdersLayout);
         TextView textView=new TextView(getContext());
+        textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
         textView.setText(msg);
         textView.setTextSize(30);
-        textView.setTextColor(Color.RED);
+        textView.setTextColor(Color.BLUE);
         textView.setGravity(Gravity.CENTER);
 
         linearLayout.addView(textView);
@@ -237,6 +225,19 @@ SharedPreferences prefs;
         backgroundTask=new BackgroundTask();
         if(!prefs.getString("email", "").equals(""))
             backgroundTask.execute("fillMyOrders.php");
+        else {
+            LinearLayout linearLayout=getView().findViewById(R.id.myOrdersLayout);
+            TextView textView=new TextView(getContext());
+            textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+            textView.setText("Please Login To See Your Orders.");
+            textView.setTextSize(30);
+            textView.setTextColor(Color.BLUE);
+            textView.setGravity(Gravity.CENTER);
+
+            linearLayout.addView(textView);
+        }
+//        setEmptyMsg("Please Login To See Your Orders.");
 
     }
 
@@ -258,6 +259,7 @@ SharedPreferences prefs;
             if(!s.equals(""))
                  setRecyclerView(result);
             else setEmptyMsg("No order has been given till now");
+            onRefreshComplete();
 
         }
 
@@ -349,6 +351,10 @@ SharedPreferences prefs;
             backgroundTask.execute("fillMyOrders.php");
     }
 
+    private void onRefreshComplete() {
+
+        refreshLayout.setRefreshing(false);
+    }
 
 
 }

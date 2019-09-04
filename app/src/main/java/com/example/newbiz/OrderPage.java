@@ -3,19 +3,27 @@ package com.example.newbiz;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,23 +55,14 @@ tvAddressLabel,etAddress,
 tvTaxesLabel,tvTaxes,
 tvTotalLabel,tvTotal;
 private Single_Card myFood;
-    SharedPreferences prefs;
+private SharedPreferences prefs;
 
 private float totalPrice;
 private Button btnCalculateTotal,btnPlaceOrder;
+private ImageButton ibGetCurrentLocation;
 
 SessionManager manager;
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==RESULT_OK){
-            //great
-        }
-        else{
-            finish();
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,19 +90,29 @@ SessionManager manager;
         tvTotal=findViewById(R.id.tvTotal);
         btnCalculateTotal=findViewById(R.id.btnCalculateTotal);
         btnPlaceOrder=findViewById(R.id.btnPlaceOrder);
+        ibGetCurrentLocation=findViewById(R.id.ibGetCurrentLocation);
+
+        ibGetCurrentLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(OrderPage.this,"Getting current location",Toast.LENGTH_SHORT).show();
+                    startActivityForResult(new Intent(OrderPage.this,AddressListActivity.class),0);
+            }
+        });
+
+
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);//Set Back Icon on Activity
 
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN); //to hide keyboard
 
-
-        if(prefs.getString("address",null)!=null){
+        if(prefs.getString("email","")!=""){
             etAddress.setText(prefs.getString("address",""));
         }
         else{
-            startActivityForResult(new Intent(OrderPage.this,LoginActivity.class),0);
-
-
-
+            startActivity(new Intent(OrderPage.this,LoginActivity.class));
+            finish();
         }
         Intent intent=this.getIntent();
         Bundle bundle=intent.getExtras();
@@ -188,12 +197,30 @@ SessionManager manager;
 
     }
 
+    // Call Back method  to get the Message form other Activity
+    @Override
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 0
+        if(requestCode==0)
+        {
+            String currentAddress=data.getStringExtra("currentAddress");
+            etAddress.setText(currentAddress);
+        }
+        else Toast.makeText(OrderPage.this,"Couldn't fetch address. Try Again.",Toast.LENGTH_SHORT).show();
+    }
+
+
     public void finishThisAct(){
 
         Toast.makeText(getApplicationContext(),"Order Placed",Toast.LENGTH_SHORT).show();
         Toast.makeText(getApplicationContext(),"Go To 'My Orders' ",Toast.LENGTH_LONG).show();
         finish();
     }
+
+
 
 
     public static void hideKeyboard(Activity activity) {
@@ -206,9 +233,6 @@ SessionManager manager;
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-
-
-
 
 
 

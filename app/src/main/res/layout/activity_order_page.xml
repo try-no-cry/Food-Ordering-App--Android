@@ -185,12 +185,25 @@
                         android:layout_marginTop="10sp"
                         android:layout_marginRight="10sp"
                         android:layout_marginBottom="10sp"
-                        android:layout_weight="2"
-                        android:inputType="textPostalAddress"
+                        android:layout_weight="1.9"
+                        android:inputType="textMultiLine|textPostalAddress"
                         android:padding="5sp"
                         android:text=""
                         android:textColor="#000"
                         android:textSize="15sp" />
+
+
+                    <ImageButton
+                        android:id="@+id/ibGetCurrentLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|center_horizontal"
+                        android:layout_weight="0.10"
+                        android:background="@android:color/transparent"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:visibility="visible"
+                        app:srcCompat="@drawable/ic_location_on_black_24dp" />
 
 
                 </LinearLayout>

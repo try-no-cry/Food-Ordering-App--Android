@@ -107,7 +107,7 @@ public class order_detail_on_click extends AppCompatActivity {
                 }
                 else {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(order_detail_on_click.this);
-                    builder.setTitle("Confirm Cancelllation");
+                    builder.setTitle("Confirm Cancellation");
                     builder.setMessage("Are you sure of cancelling this order?");
                     builder.setCancelable(true);
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
