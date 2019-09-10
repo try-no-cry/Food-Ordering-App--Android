@@ -80,6 +80,8 @@ public class AddressListActivity extends BaseActivity {
             fusedLocationClient.requestLocationUpdates(locationRequest,
                     locationCallback,
                     null);
+
+
         }
     }
 
@@ -111,6 +113,9 @@ public class AddressListActivity extends BaseActivity {
                     Toast.makeText(this, "Location permission not granted, " +
                                     "restart the app if you want the feature",
                             Toast.LENGTH_SHORT).show();
+//                    Intent intent=new Intent();
+//                    setResult(1,intent);
+//                    finish();
                 }
                 return;
             }

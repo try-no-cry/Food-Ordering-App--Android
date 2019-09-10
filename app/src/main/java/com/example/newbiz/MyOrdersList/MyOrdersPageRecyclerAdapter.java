@@ -1,10 +1,8 @@
-package com.example.newbiz;
+package com.example.newbiz.MyOrdersList;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.newbiz.R;
+import com.example.newbiz.order_detail_on_click;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 public class MyOrdersPageRecyclerAdapter extends RecyclerView.Adapter<MyOrdersPageRecyclerAdapter.ViewHolder> {
 private ArrayList<MyOrders_SingleOrder> list;
@@ -94,7 +93,7 @@ private Context context;
         String status=list.get(position).getOrderStatus();
 
 
-        Intent intent=new Intent(context,order_detail_on_click.class);
+        Intent intent=new Intent(context, order_detail_on_click.class);
         intent.putExtra("order_id",order_id);
         intent.putExtra("imageUrl",imageUrl);
 

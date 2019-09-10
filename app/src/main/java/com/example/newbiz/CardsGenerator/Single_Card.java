@@ -1,10 +1,22 @@
-package com.example.newbiz;
+package com.example.newbiz.CardsGenerator;
+
+import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
 public class Single_Card implements Serializable {
 
-    private  String imageUrl,foodName,foodPrice,address,anyOtherInfo,foodCard_id;
+    private  String imageUrl;
+    String foodName,foodPrice;
+
+    @SerializedName("location")
+    String address;
+
+    @SerializedName("any_other_info")
+    String anyOtherInfo;
+
+    @SerializedName("foodcard_id")
+    String foodCard_id;
     private String food_id;
 
     public String getImageUrl() {

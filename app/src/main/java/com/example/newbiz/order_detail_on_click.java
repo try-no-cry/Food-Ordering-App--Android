@@ -1,13 +1,7 @@
 package com.example.newbiz;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.newbiz.CardsGenerator.Single_Card;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
@@ -37,8 +32,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-
-import javax.net.ssl.SNIHostName;
 
 public class order_detail_on_click extends BaseActivity {
     private TextView tvStatusLabel_Ordered,tvFoodStatus_Ordered;

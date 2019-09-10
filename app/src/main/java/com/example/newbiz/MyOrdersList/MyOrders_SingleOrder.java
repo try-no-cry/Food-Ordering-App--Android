@@ -1,4 +1,4 @@
-package com.example.newbiz;
+package com.example.newbiz.MyOrdersList;
 
 public class MyOrders_SingleOrder {
 //this class is for objects required only to fill recycler view of My Orders fragment

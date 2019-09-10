@@ -1,15 +1,18 @@
 package com.example.newbiz;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -45,7 +48,7 @@ public class EditInfo extends BaseActivity {
     private Button btn_updateDetails;
     private SharedPreferences prefs;
     private String name,email,address,contact;
-
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -64,6 +67,8 @@ public class EditInfo extends BaseActivity {
 //        etEditEmail=findViewById(R.id.etEditEmail);
         etEditAddress=findViewById(R.id.etEditAddress);
         etEditContact=findViewById(R.id.etEditContact);
+        progressDialog=new ProgressDialog(getApplicationContext());
+
 
 
 
@@ -80,6 +85,7 @@ public class EditInfo extends BaseActivity {
 
 
         btn_updateDetails.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
 
@@ -97,6 +103,12 @@ public class EditInfo extends BaseActivity {
                 }else{
                     BackgroundTask backgroundTask=new BackgroundTask();
                     backgroundTask.execute(name,email,address,contact,"updateUserInfo.php");
+                    progressDialog.setTitle("Updating Info");
+                    progressDialog.setCanceledOnTouchOutside(false);
+                    progressDialog.create();
+                    progressDialog.show();
+
+
 
                 }
 
@@ -152,6 +164,7 @@ public class EditInfo extends BaseActivity {
 //                    MyAccount account=new MyAccount();
 //                                        account.setUserVisibleHint(true);
                     Toast.makeText(getApplicationContext(),"Info Updated.",Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
 
 
                    finish();

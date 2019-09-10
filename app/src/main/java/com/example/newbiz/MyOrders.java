@@ -17,7 +17,9 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
@@ -26,6 +28,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.newbiz.IntroSlider.SlideAdapter;
+import com.example.newbiz.IntroSlider.Slide_recycler;
+import com.example.newbiz.IntroSlider.Slider;
+import com.example.newbiz.IntroSlider.SliderModal;
+import com.example.newbiz.MyOrdersList.MyOrdersInterface;
+import com.example.newbiz.MyOrdersList.MyOrdersModal;
+import com.example.newbiz.MyOrdersList.MyOrdersPageRecyclerAdapter;
+import com.example.newbiz.MyOrdersList.MyOrders_SingleOrder;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,6 +56,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.logging.Logger;
+
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -54,9 +77,9 @@ public class MyOrders extends Fragment implements SwipeRefreshLayout.OnRefreshLi
 
 
 protected static String  CONNECTION="https://newbizsite.000webhostapp.com/";
-//protected static String  CONNECTION="http://192.168.43.77";
+//protected static String  CONNECTION="http://192.168.43.77/phpAndroid/";
 //private TextView tvMyOrders;
-private  BackgroundTask backgroundTask;
+//private  BackgroundTask backgroundTask;
 static  String resultFromQuery;
 private RecyclerView myOrdersRecycler;
 private RecyclerView.Adapter adapter;
@@ -78,7 +101,7 @@ private SwipeRefreshLayout refreshLayout;
         refreshLayout.setColorSchemeColors(Color.BLUE, Color.GREEN, Color.YELLOW);
         refreshLayout.setOnRefreshListener(this);
 
-        backgroundTask=new BackgroundTask();
+//        backgroundTask=new BackgroundTask();
 
       //  String sql="SELECT * FROM orders ORDER BY id DESC";
 //went in Resume
@@ -87,51 +110,7 @@ private SwipeRefreshLayout refreshLayout;
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if(prefs.getString("email", "").equals(""))
-            setEmptyMsg();
 
-    }
-
-
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @Override
-    public void onPause() {
-        super.onPause();
-       // tvMyOrders= Objects.requireNonNull(getView()).findViewById(R.id.tvMyOrders);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-
-        if (getArguments() != null) {
-            resultFromQuery = getArguments().getString("data"); //coming from main activity
-        }
-
-
-
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-    }
 
 
 
@@ -153,7 +132,7 @@ private SwipeRefreshLayout refreshLayout;
                     int count=0;
                     if(jsonArray.length()==0)
                     {
-                        setEmptyMsg();
+                        tvOfflineMessage.setVisibility(View.VISIBLE);
                     }
 
                     String imageUrl,foodName,orderDate,orderStatus,order_id;
@@ -202,20 +181,7 @@ private SwipeRefreshLayout refreshLayout;
 
     }
 
-    private void setEmptyMsg() {
 
- tvOfflineMessage.setVisibility(View.VISIBLE);
-//        LinearLayout linearLayout=getView().findViewById(R.id.myOrdersLayout);
-//        TextView textView=new TextView(getContext());
-//        textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-//
-//        textView.setText(msg);
-//        textView.setTextSize(30);
-//        textView.setTextColor(Color.BLUE);
-//        textView.setGravity(Gravity.CENTER);
-//
-//        linearLayout.addView(textView);
-    }
 
 
     public void  checkNetworkConnection(){
@@ -266,19 +232,100 @@ private SwipeRefreshLayout refreshLayout;
     public void onResume() {
         super.onResume();
         checkNetworkConnection();
-        backgroundTask=new BackgroundTask();
+//        backgroundTask=new BackgroundTask();
 
         if(!prefs.getString("email", "").equals("")){
-            backgroundTask.execute("fillMyOrders.php");
+//            backgroundTask.execute("fillMyOrders.php");
+            retroFillOrders(prefs.getString("email",""));
             tvOfflineMessage.setVisibility(View.GONE);
 
         }
         else {
-           setEmptyMsg();
+            tvOfflineMessage.setVisibility(View.VISIBLE);
 
         }
 
     }
+
+
+
+
+   private void retroFillOrders(String email){
+
+
+       int cacheSize = 10 * 1024 * 1024; // 10 MB
+       Cache cache = new Cache(getContext().getCacheDir(), cacheSize);
+
+//       OkHttpClient okHttpClient = new OkHttpClient.Builder()
+//               .cache(cache)
+//               .build();
+
+       Gson gson = new GsonBuilder().serializeNulls().create();
+
+
+       HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+       loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+       OkHttpClient okHttpClient = new OkHttpClient.Builder()
+               .addInterceptor(loggingInterceptor)
+               .build();
+
+
+
+
+       Retrofit retrofit=new Retrofit.Builder()
+               .baseUrl("http://newbizsite.000webhostapp.com/")
+               .client(okHttpClient)
+               .addConverterFactory(GsonConverterFactory.create(gson))
+               .build();
+
+       MyOrdersInterface myOrdersInterface=retrofit.create(MyOrdersInterface.class);
+
+       Call<MyOrdersModal> call=myOrdersInterface.getSingleOrders(email);
+
+
+       call.enqueue(new Callback<MyOrdersModal>() {
+           @Override
+           public void onResponse(Call<MyOrdersModal> call, Response<MyOrdersModal> response) {
+               if(!response.isSuccessful()){
+                   Toast.makeText(getContext(),"MunnaBhai kuch Jhol hai!",Toast.LENGTH_SHORT).show();
+                   return;
+               }
+
+               if (    response.raw().networkResponse() != null &&
+                       response.raw().networkResponse().code() == HttpURLConnection.HTTP_NOT_MODIFIED) {
+                   // the response hasn't changed, so you do not need to do anything
+                   return;
+               }
+
+               MyOrdersModal myOrdersModal=response.body();
+
+               if(Integer.parseInt(myOrdersModal.getSuccess())==1){
+
+                   ArrayList<MyOrders_SingleOrder> singleOrdersList=response.body().getSingleOrders();
+
+                   MyOrdersPageRecyclerAdapter adapter=new MyOrdersPageRecyclerAdapter(singleOrdersList,getContext());
+                   myOrdersRecycler.setHasFixedSize(true);
+                   layoutManager=new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
+                   myOrdersRecycler.setLayoutManager(layoutManager);
+                   myOrdersRecycler.setAdapter(adapter);
+
+               }
+               else {
+                   Toast.makeText(getContext(),"Fail hogya task bhidu!",Toast.LENGTH_SHORT).show();
+                   return;
+               }
+           }
+
+           @Override
+           public void onFailure(Call<MyOrdersModal> call, Throwable t) {
+
+               Toast.makeText(getContext(),"Gadbadjhala!! "+t.getMessage(),Toast.LENGTH_SHORT).show();
+               return;
+           }
+       });
+
+   }
 
     public  class BackgroundTask extends AsyncTask<String,Void,String> {
         AlertDialog.Builder builder;
@@ -387,11 +434,12 @@ private SwipeRefreshLayout refreshLayout;
 
         if(prefs.getString("email","")!=""){
 
-            backgroundTask=new BackgroundTask();
+//            backgroundTask=new BackgroundTask();
 
             //  String sql="SELECT * FROM orders ORDER BY id DESC";
             if(!prefs.getString("email", "").equals(""))
-                backgroundTask.execute("fillMyOrders.php");
+//                backgroundTask.execute("fillMyOrders.php");
+                retroFillOrders(prefs.getString("email",""));
              }
         else onRefreshComplete();
 

@@ -1,6 +1,5 @@
-package com.example.newbiz;
+package com.example.newbiz.CardsGenerator;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.newbiz.OrderPage;
+import com.example.newbiz.R;
 
 import java.util.ArrayList;
 
@@ -72,6 +73,7 @@ private Context context;
 
         //set food image by glide
         Glide.with(context).load(imageUrl).into(holder.ivFoodImage);
+//        holder.ivFoodImage.setImageResource(R.drawable.beach);
 
         holder.tvFoodName.setText(foodName);
         holder.tvPrice.setText("₹" + Price);
@@ -83,7 +85,7 @@ private Context context;
             public void onClick(View view) {
 
                 Toast.makeText(context,foodName,Toast.LENGTH_SHORT).show();
-                Intent intent=new Intent(context,OrderPage.class);
+                Intent intent=new Intent(context, OrderPage.class);
 
                 Single_Card single_card=new Single_Card();
                 single_card.setFoodCard_id(foodcard_id);

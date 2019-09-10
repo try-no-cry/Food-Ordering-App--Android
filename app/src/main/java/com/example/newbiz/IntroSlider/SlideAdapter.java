@@ -1,4 +1,4 @@
-package com.example.newbiz;
+package com.example.newbiz.IntroSlider;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.newbiz.R;
 
 import java.util.ArrayList;
 
@@ -51,7 +52,7 @@ Context context;
         String food_id=list.get(position).getFoodID();
 
         Glide.with(context).load(imageUrl).centerCrop().into(holder.ivSlideRec);
-
+//holder.ivSlideRec.setImageResource(R.drawable.sunset);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
