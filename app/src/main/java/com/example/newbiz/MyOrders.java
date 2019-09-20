@@ -113,77 +113,6 @@ private SwipeRefreshLayout refreshLayout;
 
 
 
-
-
-    public  void setRecyclerView(String data){
-
-
-            MyOrders_SingleOrder order;
-            JSONArray jsonArray;
-            try {
-                JSONObject jsonObject=new JSONObject(data);
-                String check=jsonObject.getString("success");
-                Log.d("checkCondition", String.valueOf(check));
-
-                if(check.equals("1")){
-
-                 //JSONArray jsonArray=jsonObject.getJSONArray("data");
-                    jsonArray=jsonObject.getJSONArray("data");
-                    int count=0;
-                    if(jsonArray.length()==0)
-                    {
-                        tvOfflineMessage.setVisibility(View.VISIBLE);
-                    }
-
-                    String imageUrl,foodName,orderDate,orderStatus,order_id;
-                    if(list.size()!=0)
-                        list.clear();
-                    while(count<jsonArray.length()){
-
-                        JSONObject JO=jsonArray.getJSONObject(count);
-                        imageUrl=JO.getString("imageUrl");
-                        foodName=JO.getString("foodName");
-                        orderDate=JO.getString("orderDate");
-                        orderStatus=JO.getString("orderStatus");
-                        order_id=JO.getString("order_id");
-
-                        order=new MyOrders_SingleOrder();
-                        order.setImageUrl(imageUrl);
-                        order.setFoodName(foodName);
-                        order.setOrderDate(orderDate);
-                        order.setOrder_id(order_id);
-                        order.setOrderStatus(orderStatus);
-
-                        list.add(order);
-                        count++;
-
-                    }
-
-                    MyOrdersPageRecyclerAdapter adapter=new MyOrdersPageRecyclerAdapter(list,getContext());
-                    myOrdersRecycler.setHasFixedSize(true);
-                    layoutManager=new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false);
-                    myOrdersRecycler.setLayoutManager(layoutManager);
-                    myOrdersRecycler.setAdapter(adapter);
-
-                }
-                else {
-                    //show some error message for not fetching the orders
-                    Toast.makeText(getContext(),"Orders could not be fetched. Please check your internet connection.",Toast.LENGTH_LONG).show();
-                }
-
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Toast.makeText(getContext(),"Couldn't connect. Try Again",Toast.LENGTH_LONG).show();
-            }
-            //tvMyOrders.setText(data);
-
-    }
-
-
-
-
     public void  checkNetworkConnection(){
 
         if (isOnline()) {
@@ -199,7 +128,7 @@ private SwipeRefreshLayout refreshLayout;
 
                 builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        checkNetworkConnection();
+//                        checkNetworkConnection();
                     }
                 });
 
@@ -232,10 +161,7 @@ private SwipeRefreshLayout refreshLayout;
     public void onResume() {
         super.onResume();
         checkNetworkConnection();
-//        backgroundTask=new BackgroundTask();
-
         if(!prefs.getString("email", "").equals("")){
-//            backgroundTask.execute("fillMyOrders.php");
             retroFillOrders(prefs.getString("email",""));
             tvOfflineMessage.setVisibility(View.GONE);
 
@@ -256,9 +182,6 @@ private SwipeRefreshLayout refreshLayout;
        int cacheSize = 10 * 1024 * 1024; // 10 MB
        Cache cache = new Cache(getContext().getCacheDir(), cacheSize);
 
-//       OkHttpClient okHttpClient = new OkHttpClient.Builder()
-//               .cache(cache)
-//               .build();
 
        Gson gson = new GsonBuilder().serializeNulls().create();
 
@@ -268,7 +191,10 @@ private SwipeRefreshLayout refreshLayout;
 
        OkHttpClient okHttpClient = new OkHttpClient.Builder()
                .addInterceptor(loggingInterceptor)
+               .cache(cache)
                .build();
+
+
 
 
 
@@ -327,89 +253,6 @@ private SwipeRefreshLayout refreshLayout;
 
    }
 
-    public  class BackgroundTask extends AsyncTask<String,Void,String> {
-        AlertDialog.Builder builder;
-        private static final String KEY_SUCCESS ="success" ;
-        private static final String KEY_DATA ="data" ;
-        String result="  ";
-//        String connstr= CONNECTION +"/phpAndroid/";
-        String connstr=CONNECTION;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if(!s.equals(""))
-                 setRecyclerView(result);
-//            else setEmptyMsg();
-            onRefreshComplete();
-
-        }
-
-        @Override
-        protected String doInBackground(String... voids) {
-
-//            String sql=voids[0];
-            String extension=voids[0];
-            String email=prefs.getString("email","");
-            //can be: selectOrder.php,insert.php
-
-
-            try {
-                URL url=new URL(connstr+extension);
-                HttpURLConnection http= (HttpURLConnection) url.openConnection();
-                http.setRequestMethod("POST");
-                http.setDoInput(true);
-                http.setDoOutput(true);
-
-                OutputStream ops=http.getOutputStream();
-
-                BufferedWriter writer=new BufferedWriter(new OutputStreamWriter(ops,"utf-8"));
-
-                String data=  URLEncoder.encode("email","UTF-8")+"="+URLEncoder.encode(email,"UTF-8");
-
-                writer.write(data);
-                writer.flush();
-                writer.close();
-                ops.close();
-
-
-                InputStream ips=http.getInputStream();
-
-                BufferedReader reader=new BufferedReader(new InputStreamReader(ips,"ISO-8859-1"));
-
-                String line="";
-
-                while((line=reader.readLine())!=null){
-
-                    result +=line;
-
-                }
-
-                reader.close();
-                ips.close();
-                http.disconnect();
-
-                return result;
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                Log.i("Message1",e.getMessage());
-                Toast.makeText(getContext(),"Error. Please Try Again.",Toast.LENGTH_SHORT).show();
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.i("Message2",e.getMessage());
-                Toast.makeText(getContext(),"Error. Please Try Again.",Toast.LENGTH_SHORT).show();
-
-            }
-
-
-            return result;
-        }
-    }
 
 
     @Override
@@ -433,12 +276,7 @@ private SwipeRefreshLayout refreshLayout;
     public void onRefresh() {
 
         if(prefs.getString("email","")!=""){
-
-//            backgroundTask=new BackgroundTask();
-
-            //  String sql="SELECT * FROM orders ORDER BY id DESC";
             if(!prefs.getString("email", "").equals(""))
-//                backgroundTask.execute("fillMyOrders.php");
                 retroFillOrders(prefs.getString("email",""));
              }
         else onRefreshComplete();
@@ -449,6 +287,10 @@ private SwipeRefreshLayout refreshLayout;
 
         refreshLayout.setRefreshing(false);
     }
+
+
+
+
 
 
 }
